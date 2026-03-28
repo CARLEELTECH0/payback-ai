@@ -1,0 +1,62 @@
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: autopay-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-autopay_nigeria}
+      POSTGRES_USER: ${POSTGRES_USER:-autopay_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-autopay_secret_2024}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-autopay_user} -d ${POSTGRES_DB:-autopay_nigeria}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: autopay-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass ${REDIS_PASSWORD:-autopay_redis_2024}
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-autopay_redis_2024}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: autopay-backend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-autopay_user}:${POSTGRES_PASSWORD:-autopay_secret_2024}@postgres:5432/${POSTGRES_DB:-autopay_nigeria}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-autopay_redis_2024}@redis:6379
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src
+
+volumes:
+  postgres_data:
+  redis_data:
