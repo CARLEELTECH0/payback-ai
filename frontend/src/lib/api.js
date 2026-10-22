@@ -180,6 +180,23 @@ class ApiClient {
   deleteAutopayRule(id) {
     return this.request(`/autopay/rules/${id}`, { method: 'DELETE' });
   }
+
+  // ---- PayBack AI Copilot ----
+  getPaybackDisputes() {
+    return this.request('/payback/disputes');
+  }
+
+  getPaybackDossier(id) {
+    return this.request(`/payback/disputes/${id}`);
+  }
+
+  simulatePaybackDispute(body) {
+    return this.request('/payback/disputes/simulate', { method: 'POST', body });
+  }
+
+  triggerPayLaterRescue(body) {
+    return this.request('/payback/recovery/rescue', { method: 'POST', body });
+  }
 }
 
 const api = new ApiClient();

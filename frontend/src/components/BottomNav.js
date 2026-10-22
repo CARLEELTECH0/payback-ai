@@ -7,6 +7,7 @@ const navItems = [
   { href: '/dashboard', label: 'Home', icon: '🏠' },
   { href: '/payments', label: 'Pay', icon: '💸' },
   { href: '/autopay', label: 'AutoPay', icon: '🔄' },
+  { href: '/payback', label: 'PayBack', icon: '🛡️' },
   { href: '/history', label: 'History', icon: '📋' },
   { href: '/settings', label: 'More', icon: '⚙️' },
 ];
