@@ -1,5 +1,6 @@
 const disputeService = require('./dispute.service');
 const evidenceService = require('./evidence.service');
+const recoveryService = require('./recovery.service');
 const paypalClient = require('../paypal/paypal.client');
 const logger = require('../../utils/logger');
 
@@ -120,48 +121,12 @@ class PayBackController {
    */
   async triggerPayLaterRescue(req, res, next) {
     try {
-      const { userEmail, amount, planName } = req.body;
-
-      // 1. Generate smart recovery invoice via PayPal API
-      const invoicePayload = {
-        detail: {
-          currency_code: 'USD',
-          note: `Payment bailout for ${planName || 'Recurring Subscription'}. Split your payment into 4 interest-free installments using PayPal Pay Later.`,
-          payment_term: { term_type: 'DUE_ON_RECEIPT' },
-        },
-        invoicer: {
-          name: { given_name: 'AutoPay', surname: 'Nigeria' },
-        },
-        primary_recipients: [
-          {
-            billing_info: {
-              email_address: userEmail || 'customer@example.com',
-            },
-          },
-        ],
-        items: [
-          {
-            name: `${planName || 'Monthly Subscription'} (Pay Later Recovery)`,
-            quantity: '1',
-            unit_amount: { currency_code: 'USD', value: (amount || 25.00).toString() },
-          },
-        ],
-      };
-
-      const invoice = await paypalClient.createInvoice(invoicePayload);
-      if (invoice.id) {
-        await paypalClient.sendInvoice(invoice.id);
-      }
+      const result = await recoveryService.interceptFailedDebit(req.body);
 
       res.status(200).json({
         success: true,
         message: 'PayBack AI dispatched PayPal Pay Later recovery offer to customer',
-        data: {
-          invoiceId: invoice.id,
-          status: 'SENT',
-          action: 'PAY_LATER_RESCUE_DISPATCHED',
-          discountOffered: '10% Retention Credit Applied',
-        },
+        data: result,
       });
     } catch (error) {
       next(error);

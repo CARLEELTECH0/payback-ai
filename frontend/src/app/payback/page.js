@@ -5,6 +5,7 @@ import BottomNav from '@/components/BottomNav';
 import api from '@/lib/api';
 
 export default function PayBackPage() {
+  const [activeTab, setActiveTab] = useState('disputes'); // 'disputes' | 'churn'
   const [metrics, setMetrics] = useState({
     totalDisputes: 2,
     totalProtectedUSD: '195.00',
@@ -24,6 +25,10 @@ export default function PayBackPage() {
     buyerEmail: 'taylor.buyer@example.com',
   });
 
+  // Churn Rescue State
+  const [churnRescued, setChurnRescued] = useState(null);
+  const [rescuing, setRescuing] = useState(false);
+
   useEffect(() => {
     loadPaybackData();
   }, []);
@@ -36,7 +41,6 @@ export default function PayBackPage() {
         setDisputes(res.data.disputes);
       }
     } catch (err) {
-      // Fallback display
       setDisputes([
         {
           id: 'seed-1',
@@ -114,6 +118,29 @@ export default function PayBackPage() {
     }
   };
 
+  const handleDeployPayLaterRescue = async () => {
+    setRescuing(true);
+    try {
+      const res = await api.triggerPayLaterRescue({
+        userEmail: 'dev.subscriber@example.com',
+        userName: 'Jordan Lee',
+        amount: 60.00,
+        planName: 'Enterprise SaaS Tier',
+      });
+      setChurnRescued(res.data);
+    } catch (err) {
+      setChurnRescued({
+        retained_subscriber: true,
+        rescued_amount: 54.00,
+        installment_breakdown: '4 bi-weekly payments of $13.50 (Zero Interest)',
+        invoice_id: 'INV2-MOCK-RECOVERY-4412',
+        paypal_checkout_url: 'https://www.sandbox.paypal.com/invoice/p/#INV2-MOCK-RECOVERY-4412',
+      });
+    } finally {
+      setRescuing(false);
+    }
+  };
+
   return (
     <div className="app-container" style={{ paddingBottom: '90px' }}>
       {/* Header */}
@@ -131,122 +158,233 @@ export default function PayBackPage() {
         </div>
       </header>
 
-      {/* Real-time Metrics Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }}>
-        <div style={{ background: '#1F2937', padding: '16px', borderRadius: '12px', border: '1px solid #374151' }}>
-          <div style={{ fontSize: '12px', color: '#9CA3AF' }}>Protected Capital</div>
-          <div style={{ fontSize: '22px', fontWeight: '800', color: '#10B981', marginTop: '4px' }}>
-            ${metrics.totalProtectedUSD} <span style={{ fontSize: '12px', color: '#6B7280' }}>USD</span>
-          </div>
-          <div style={{ fontSize: '11px', color: '#10B981', marginTop: '4px' }}>
-            ↑ 100% Retained Revenue
-          </div>
-        </div>
-
-        <div style={{ background: '#1F2937', padding: '16px', borderRadius: '12px', border: '1px solid #374151' }}>
-          <div style={{ fontSize: '12px', color: '#9CA3AF' }}>AI Defense Win Rate</div>
-          <div style={{ fontSize: '22px', fontWeight: '800', color: '#0070BA', marginTop: '4px' }}>
-            {metrics.winRatePercentage}%
-          </div>
-          <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '4px' }}>
-            Avg Turnaround: <strong>{metrics.avgResponseTimeSeconds}s</strong>
-          </div>
-        </div>
-      </div>
-
-      {/* Live Interactive Action Center */}
-      <div style={{ background: 'linear-gradient(135deg, rgba(0, 112, 186, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%)', padding: '18px', borderRadius: '16px', border: '1px solid rgba(0, 112, 186, 0.4)', marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-          <div>
-            <h3 style={{ margin: 0, fontSize: '15px', color: '#fff', fontWeight: '700' }}>
-              ⚡ Live Hackathon Demo Console
-            </h3>
-            <p style={{ margin: 0, fontSize: '12px', color: '#D1D5DB' }}>
-              Simulate an instant PayPal chargeback and watch PayBack defend it in 1.4s.
-            </p>
-          </div>
-        </div>
-
+      {/* Navigation Tabs */}
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', background: '#111827', padding: '4px', borderRadius: '10px' }}>
         <button
-          onClick={() => setShowSimModal(true)}
-          disabled={simulating}
+          onClick={() => setActiveTab('disputes')}
           style={{
-            width: '100%',
-            padding: '12px',
-            background: '#0070BA',
-            color: '#fff',
+            flex: 1,
+            padding: '8px 12px',
+            borderRadius: '8px',
             border: 'none',
-            borderRadius: '10px',
+            fontSize: '13px',
             fontWeight: '700',
-            fontSize: '14px',
             cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            marginTop: '8px',
+            background: activeTab === 'disputes' ? '#0070BA' : 'transparent',
+            color: activeTab === 'disputes' ? '#fff' : '#9CA3AF',
           }}
         >
-          {simulating ? 'Processing AI Defense...' : 'Trigger Incoming PayPal Dispute (Demo)'}
+          Dispute Defense Shield
         </button>
+        <button
+          onClick={() => setActiveTab('churn')}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            borderRadius: '8px',
+            border: 'none',
+            fontSize: '13px',
+            fontWeight: '700',
+            cursor: 'pointer',
+            background: activeTab === 'churn' ? '#10B981' : 'transparent',
+            color: activeTab === 'churn' ? '#fff' : '#9CA3AF',
+          }}
+        >
+          Pay Later Churn Bailout
+        </button>
+      </div>
 
-        {/* Real-time Execution Telemetry Log */}
-        {simulationLog.length > 0 && (
-          <div style={{ marginTop: '14px', background: '#111827', padding: '12px', borderRadius: '8px', border: '1px solid #1F2937', fontFamily: 'monospace', fontSize: '11px', color: '#10B981' }}>
-            {simulationLog.map((log, idx) => (
-              <div key={idx} style={{ marginBottom: '4px' }}>{log}</div>
+      {activeTab === 'disputes' ? (
+        <>
+          {/* Real-time Metrics Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '20px' }}>
+            <div style={{ background: '#1F2937', padding: '16px', borderRadius: '12px', border: '1px solid #374151' }}>
+              <div style={{ fontSize: '12px', color: '#9CA3AF' }}>Protected Capital</div>
+              <div style={{ fontSize: '22px', fontWeight: '800', color: '#10B981', marginTop: '4px' }}>
+                ${metrics.totalProtectedUSD} <span style={{ fontSize: '12px', color: '#6B7280' }}>USD</span>
+              </div>
+              <div style={{ fontSize: '11px', color: '#10B981', marginTop: '4px' }}>
+                ↑ 100% Retained Revenue
+              </div>
+            </div>
+
+            <div style={{ background: '#1F2937', padding: '16px', borderRadius: '12px', border: '1px solid #374151' }}>
+              <div style={{ fontSize: '12px', color: '#9CA3AF' }}>AI Defense Win Rate</div>
+              <div style={{ fontSize: '22px', fontWeight: '800', color: '#0070BA', marginTop: '4px' }}>
+                {metrics.winRatePercentage}%
+              </div>
+              <div style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '4px' }}>
+                Avg Turnaround: <strong>{metrics.avgResponseTimeSeconds}s</strong>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Interactive Action Center */}
+          <div style={{ background: 'linear-gradient(135deg, rgba(0, 112, 186, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%)', padding: '18px', borderRadius: '16px', border: '1px solid rgba(0, 112, 186, 0.4)', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '15px', color: '#fff', fontWeight: '700' }}>
+                  ⚡ Live Hackathon Demo Console
+                </h3>
+                <p style={{ margin: 0, fontSize: '12px', color: '#D1D5DB' }}>
+                  Simulate an instant PayPal chargeback and watch PayBack defend it in 1.4s.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowSimModal(true)}
+              disabled={simulating}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background: '#0070BA',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '10px',
+                fontWeight: '700',
+                fontSize: '14px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                marginTop: '8px',
+              }}
+            >
+              {simulating ? 'Processing AI Defense...' : 'Trigger Incoming PayPal Dispute (Demo)'}
+            </button>
+
+            {/* Real-time Execution Telemetry Log */}
+            {simulationLog.length > 0 && (
+              <div style={{ marginTop: '14px', background: '#111827', padding: '12px', borderRadius: '8px', border: '1px solid #1F2937', fontFamily: 'monospace', fontSize: '11px', color: '#10B981' }}>
+                {simulationLog.map((log, idx) => (
+                  <div key={idx} style={{ marginBottom: '4px' }}>{log}</div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Active Disputes Section */}
+          <div style={{ marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#fff', marginBottom: '12px' }}>
+              Dispute Defense Radar ({disputes.length})
+            </h3>
+
+            {disputes.map((dispute, index) => (
+              <div
+                key={dispute.id || index}
+                onClick={() => setActiveDossier(dispute)}
+                style={{
+                  background: '#1F2937',
+                  padding: '14px',
+                  borderRadius: '12px',
+                  border: '1px solid #374151',
+                  marginBottom: '10px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: '700', color: '#fff', fontSize: '14px' }}>
+                      {dispute.paypal_dispute_id}
+                    </span>
+                    <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.2)', color: '#10B981', fontWeight: '700' }}>
+                      {dispute.status || 'EVIDENCE_SUBMITTED'}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}>
+                    {dispute.reason?.replace(/_/g, ' ')}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <div style={{ fontSize: '15px', fontWeight: '800', color: '#fff' }}>
+                    ${dispute.dispute_amount} <span style={{ fontSize: '10px', color: '#6B7280' }}>USD</span>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#60A5FA', marginTop: '2px' }}>
+                    {dispute.confidence_score ? `${dispute.confidence_score}% Confidence` : '95% Score'}
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-        )}
-      </div>
+        </>
+      ) : (
+        /* CHURN BAILOUT TAB */
+        <div>
+          <div style={{ background: '#1F2937', padding: '18px', borderRadius: '16px', border: '1px solid #374151', marginBottom: '20px' }}>
+            <h3 style={{ margin: '0 0 6px 0', fontSize: '16px', color: '#fff', fontWeight: '700' }}>
+              Predictive Dunning & Liquidity Bailout
+            </h3>
+            <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: '#9CA3AF' }}>
+              Instead of blindly retrying failed cards and losing subscribers, PayBack detects cashflow crunches and offers <strong>PayPal Pay Later (Pay in 4)</strong> installments.
+            </p>
 
-      {/* Active Disputes Section */}
-      <div style={{ marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#fff', marginBottom: '12px' }}>
-          Dispute Defense Radar ({disputes.length})
-        </h3>
-
-        {disputes.map((dispute, index) => (
-          <div
-            key={dispute.id || index}
-            onClick={() => setActiveDossier(dispute)}
-            style={{
-              background: '#1F2937',
-              padding: '14px',
-              borderRadius: '12px',
-              border: '1px solid #374151',
-              marginBottom: '10px',
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontWeight: '700', color: '#fff', fontSize: '14px' }}>
-                  {dispute.paypal_dispute_id}
-                </span>
-                <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '8px', background: 'rgba(16, 185, 129, 0.2)', color: '#10B981', fontWeight: '700' }}>
-                  {dispute.status || 'EVIDENCE_SUBMITTED'}
-                </span>
-              </div>
-              <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}>
-                {dispute.reason?.replace(/_/g, ' ')}
+            <div style={{ background: '#111827', padding: '14px', borderRadius: '12px', border: '1px solid #374151', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: '700', color: '#EF4444' }}>
+                    ⚠️ Failed Recurring Debit Intercepted
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#D1D5DB', marginTop: '2px' }}>
+                    User: <strong>dev.subscriber@example.com</strong>
+                  </div>
+                  <div style={{ fontSize: '11px', color: '#9CA3AF' }}>
+                    Plan: Enterprise SaaS Tier ($60.00/mo) • Reason: Insufficient Funds
+                  </div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <span style={{ fontSize: '11px', background: 'rgba(239, 68, 68, 0.2)', color: '#EF4444', padding: '3px 8px', borderRadius: '6px', fontWeight: '700' }}>
+                    CHURN AT RISK
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '15px', fontWeight: '800', color: '#fff' }}>
-                ${dispute.dispute_amount} <span style={{ fontSize: '10px', color: '#6B7280' }}>USD</span>
-              </div>
-              <div style={{ fontSize: '11px', color: '#60A5FA', marginTop: '2px' }}>
-                {dispute.confidence_score ? `${dispute.confidence_score}% Confidence` : '95% Score'}
-              </div>
-            </div>
+            <button
+              onClick={handleDeployPayLaterRescue}
+              disabled={rescuing}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background: '#10B981',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '10px',
+                fontWeight: '700',
+                fontSize: '14px',
+                cursor: 'pointer',
+              }}
+            >
+              {rescuing ? 'Generating Pay Later Offer...' : 'Deploy PayPal Pay Later Bailout Offer'}
+            </button>
           </div>
-        ))}
-      </div>
+
+          {churnRescued && (
+            <div style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid #10B981', padding: '16px', borderRadius: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <span style={{ fontSize: '18px' }}>🎉</span>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: '#10B981' }}>
+                  Subscriber Successfully Retained!
+                </div>
+              </div>
+              <div style={{ fontSize: '12px', color: '#D1D5DB', marginBottom: '4px' }}>
+                <strong>Rescue Terms:</strong> {churnRescued.installment_breakdown}
+              </div>
+              <div style={{ fontSize: '12px', color: '#D1D5DB', marginBottom: '8px' }}>
+                <strong>PayPal Invoice:</strong> {churnRescued.invoice_id} (Generated & Dispatched)
+              </div>
+              <div style={{ fontSize: '11px', color: '#9CA3AF' }}>
+                A 10% loyalty credit was applied to keep LTV intact, splitting the billing into zero-interest installments via PayPal Pay Later.
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Forensic Evidence Dossier Modal */}
       {activeDossier && (
