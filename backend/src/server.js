@@ -19,6 +19,7 @@ const walletRoutes = require('./modules/wallet/wallet.routes');
 const paymentRoutes = require('./modules/payment/payment.routes');
 const billerRoutes = require('./modules/payment/biller.routes');
 const autopayRoutes = require('./modules/autopay/autopay.routes');
+const paybackRoutes = require('./modules/payback/payback.routes');
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use('/api/wallet', walletRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/billers', billerRoutes);
 app.use('/api/autopay', autopayRoutes);
+app.use('/api/payback', paybackRoutes);
 
 // ============================================
 // 404 Handler

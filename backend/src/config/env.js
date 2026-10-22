@@ -50,6 +50,21 @@ const env = {
     baseUrl: process.env.TERMII_BASE_URL || 'https://api.ng.termii.com',
   },
 
+  // PayPal Sandbox & API
+  paypal: {
+    clientId: process.env.PAYPAL_CLIENT_ID || 'sandbox-client-id-placeholder',
+    clientSecret: process.env.PAYPAL_CLIENT_SECRET || 'sandbox-client-secret-placeholder',
+    baseUrl: process.env.PAYPAL_BASE_URL || 'https://api-m.sandbox.paypal.com',
+    webhookId: process.env.PAYPAL_WEBHOOK_ID || 'sandbox-webhook-id-placeholder',
+    mockMode: process.env.PAYPAL_MOCK_MODE !== 'false', // Defaults to mock in dev until credentials are provided
+  },
+
+  // PayBack AI Configuration
+  ai: {
+    apiKey: process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY || '',
+    model: process.env.AI_MODEL || 'gpt-4o-mini',
+  },
+
   // Encryption
   encryptionKey: process.env.ENCRYPTION_KEY || 'dev-encryption-key-32chars-here!',
 
