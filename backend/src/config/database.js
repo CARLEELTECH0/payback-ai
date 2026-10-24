@@ -27,10 +27,21 @@ const memoryStore = {
     {
       id: '11111111-1111-1111-1111-111111111111',
       email: 'merchant@payback.ai',
-      phone: '+2348099887766',
-      first_name: 'Carleel',
-      last_name: 'Enterprise',
-      password_hash: '$2a$10$wT0E0r6k7gOa6u7w7w7w7uK0mO9q3b2x1y4z5a6b7c8d9e0f1g2h3',
+      phone: '+14085550100',
+      first_name: 'Jordan',
+      last_name: 'Lee',
+      password_hash: '$2a$10$Dh/thL3bUn9uYl2GFJXDpOqVZqzwDRaZN7TC.aJRVcO1CIfRV794G',
+      is_verified: true,
+      is_active: true,
+      created_at: new Date(Date.now() - 90 * 86400000),
+    },
+    {
+      id: '11111111-1111-1111-1111-111111111112',
+      email: 'jordan.lee@paypal.com',
+      phone: '+14085550199',
+      first_name: 'Jordan',
+      last_name: 'Lee',
+      password_hash: '$2a$10$Dh/thL3bUn9uYl2GFJXDpOqVZqzwDRaZN7TC.aJRVcO1CIfRV794G',
       is_verified: true,
       is_active: true,
       created_at: new Date(Date.now() - 90 * 86400000),
@@ -40,12 +51,21 @@ const memoryStore = {
     {
       id: '22222222-2222-2222-2222-222222222222',
       user_id: '11111111-1111-1111-1111-111111111111',
-      balance: '450000.00',
-      currency: 'NGN',
+      balance: '284500.00',
+      currency: 'USD',
+      is_locked: false,
+      created_at: new Date(Date.now() - 90 * 86400000),
+    },
+    {
+      id: '22222222-2222-2222-2222-222222222223',
+      user_id: '11111111-1111-1111-1111-111111111112',
+      balance: '284500.00',
+      currency: 'USD',
       is_locked: false,
       created_at: new Date(Date.now() - 90 * 86400000),
     },
   ],
+  refresh_tokens: [],
   transactions: [
     {
       id: '00000000-0000-0000-0000-000000000001',
@@ -180,7 +200,7 @@ const executeMemoryQuery = (text, params) => {
           rows: [
             {
               ...t,
-              currency: 'NGN',
+              currency: 'USD',
               user_email: user.email,
               user_phone: user.phone,
               first_name: user.first_name,
@@ -201,11 +221,58 @@ const executeMemoryQuery = (text, params) => {
   }
 
   if (upper.includes('SELECT') && upper.includes('FROM WALLETS')) {
+    if (params && params.length > 0) {
+      const match = memoryStore.wallets.filter((w) => w.user_id === params[0] || w.id === params[0]);
+      if (match.length > 0) {
+        return { rows: match, rowCount: match.length };
+      }
+    }
     return { rows: [...memoryStore.wallets], rowCount: memoryStore.wallets.length };
   }
 
   if (upper.includes('SELECT') && upper.includes('FROM USERS')) {
+    if (params && params.length > 0) {
+      const queryVal = String(params[0]).toLowerCase();
+      const match = memoryStore.users.filter(
+        (u) => u.email.toLowerCase() === queryVal || u.id === queryVal || (u.phone && u.phone === queryVal)
+      );
+      return { rows: match, rowCount: match.length };
+    }
     return { rows: [...memoryStore.users], rowCount: memoryStore.users.length };
+  }
+
+  if (upper.includes('INSERT INTO REFRESH_TOKENS')) {
+    const newRt = {
+      id: `rt-${Date.now()}`,
+      user_id: params[0],
+      token_hash: params[1],
+      expires_at: params[2],
+      is_revoked: false,
+      created_at: new Date(),
+    };
+    memoryStore.refresh_tokens.push(newRt);
+    return { rows: [newRt], rowCount: 1 };
+  }
+
+  if (upper.includes('SELECT') && upper.includes('FROM REFRESH_TOKENS')) {
+    if (params && params.length >= 2) {
+      const match = memoryStore.refresh_tokens.filter(
+        (rt) => rt.token_hash === params[0] && rt.user_id === params[1] && !rt.is_revoked
+      );
+      return { rows: match, rowCount: match.length };
+    }
+    return { rows: [...memoryStore.refresh_tokens], rowCount: memoryStore.refresh_tokens.length };
+  }
+
+  if (upper.includes('UPDATE REFRESH_TOKENS')) {
+    if (upper.includes('WHERE ID = $1')) {
+      const rt = memoryStore.refresh_tokens.find((r) => r.id === params[0]);
+      if (rt) rt.is_revoked = true;
+    } else if (upper.includes('TOKEN_HASH = $1')) {
+      const rt = memoryStore.refresh_tokens.find((r) => r.token_hash === params[0]);
+      if (rt) rt.is_revoked = true;
+    }
+    return { rows: [], rowCount: 1 };
   }
 
   if (upper.includes('INSERT INTO PAYBACK_DISPUTES')) {

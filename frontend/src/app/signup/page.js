@@ -43,7 +43,7 @@ export default function SignupPage() {
         password: form.password,
       });
       showToast('Account created! Welcome to PayBack AI', 'success');
-      router.push('/dashboard');
+      router.push('/payback');
     } catch (err) {
       setErrors({ form: err.message || 'Signup failed' });
       showToast(err.message || 'Signup failed', 'error');

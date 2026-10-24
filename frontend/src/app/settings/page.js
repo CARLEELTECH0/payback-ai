@@ -36,18 +36,18 @@ export default function SettingsPage() {
         }}>
           <div style={{
             width: 52, height: 52, borderRadius: '50%',
-            background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
+            background: 'linear-gradient(135deg, #0070BA, #003087)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: 'white', fontSize: '1.3rem', fontWeight: 700, flexShrink: 0,
           }}>
-            {user?.first_name?.[0] || '?'}{user?.last_name?.[0] || ''}
+            {(user?.first_name || user?.firstName)?.[0] || 'J'}{(user?.last_name || user?.lastName)?.[0] || 'L'}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ fontWeight: 600 }}>
-              {user?.first_name || 'User'} {user?.last_name || ''}
+              {user?.first_name || user?.firstName || 'Jordan'} {user?.last_name || user?.lastName || 'Lee'}
             </p>
             <p className="text-muted" style={{ fontSize: '0.8rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {user?.email || 'user@example.com'}
+              {user?.email || 'merchant@payback.ai'} • PayPal Verified Merchant
             </p>
           </div>
         </div>

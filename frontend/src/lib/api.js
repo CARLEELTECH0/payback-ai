@@ -65,10 +65,18 @@ class ApiClient {
             const retry = await fetch(url, config);
             return await retry.json();
           }
-          // Refresh failed — logout
+          // Refresh failed — clear stale token
           this.clearTokens();
-          window.location.href = '/login';
-          return;
+          // Never force redirect if on resolution center or public demo pages
+          const path = window.location.pathname;
+          if (path.startsWith('/settings')) {
+            window.location.href = '/login';
+          }
+          throw {
+            status: 401,
+            code: 'UNAUTHORIZED',
+            message: 'Session expired. Please sign in.',
+          };
         }
 
         throw {
