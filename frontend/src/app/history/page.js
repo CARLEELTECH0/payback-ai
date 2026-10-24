@@ -54,10 +54,10 @@ export default function HistoryPage() {
     }
   };
 
-  const formatAmount = (a) => new Intl.NumberFormat('en-NG', { minimumFractionDigits: 2 }).format(a);
+  const formatAmount = (a) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(a || 0);
 
   const formatDate = (d) => {
-    return new Date(d).toLocaleDateString('en-NG', {
+    return new Date(d).toLocaleDateString('en-US', {
       day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
     });
   };
@@ -66,7 +66,7 @@ export default function HistoryPage() {
     <div className="page">
       <div className="container page-enter">
         <div className="page-header">
-          <h2>Transaction History</h2>
+          <h2>PayPal Merchant Activity</h2>
         </div>
 
         {/* Filter Tabs */}
@@ -111,7 +111,7 @@ export default function HistoryPage() {
                     <p className="tx-subtitle" style={{ fontSize: '0.7rem', opacity: 0.7 }}>Ref: {tx.reference}</p>
                   </div>
                   <div className="tx-amount">
-                    <p className="tx-amount-value">₦{formatAmount(tx.amount)}</p>
+                    <p className="tx-amount-value">{formatAmount(tx.amount)}</p>
                     <span className={`badge ${statusBadge[tx.status] || ''}`} style={{ marginTop: 4 }}>
                       {tx.status}
                     </span>

@@ -4,10 +4,10 @@ import Link from 'next/link';
 import BottomNav from '@/components/BottomNav';
 
 const services = [
-  { href: '/payments/electricity', icon: '⚡', title: 'Energy Management', desc: 'Prepaid meter top-ups via DisCos', color: 'rgba(245, 158, 11, 0.15)' },
-  { href: '/payments/transfer', icon: '💰', title: 'Universal Transfers', desc: 'Bank-to-bank & bulk subsidies', color: 'rgba(0, 166, 81, 0.15)' },
-  { href: '/payments/airtime', icon: '📱', title: 'Airtime Core', desc: 'Telco automated routing', color: 'rgba(59, 130, 246, 0.15)' },
-  { href: '/payments/data', icon: '📶', title: 'Data Core', desc: 'Data bundles for all networks', color: 'rgba(139, 92, 246, 0.15)' },
+  { href: '/payback', icon: '🛡️', title: 'PayBack Dispute Defense', desc: 'PayPal Disputes API v1 automated proof dispatch', color: 'rgba(0, 112, 186, 0.2)' },
+  { href: '/payback', icon: '🔄', title: 'Pay Later Churn Bailout', desc: 'Dynamic PayPal Pay in 4 installment generator', color: 'rgba(16, 185, 129, 0.2)' },
+  { href: '/payback', icon: '⚡', title: 'PayPal Webhook Telemetry', desc: 'Customer dispute & billing event listener', color: 'rgba(56, 189, 248, 0.2)' },
+  { href: '/history', icon: '💳', title: 'PayPal Merchant Payouts', desc: 'Enterprise double-entry settlement history', color: 'rgba(245, 158, 11, 0.2)' },
 ];
 
 export default function PaymentsPage() {
@@ -15,14 +15,16 @@ export default function PaymentsPage() {
     <div className="page">
       <div className="container page-enter">
         <div className="page-header">
-          <h2>Core Infrastructure</h2>
-          <p className="text-muted" style={{ fontSize: '0.85rem' }}>Powered by Interswitch</p>
+          <h2>PayPal Merchant Services</h2>
+          <p className="text-muted" style={{ fontSize: '0.85rem' }}>PayPal Developer APIs • Sandbox v1 Active</p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
           {services.map((s) => (
-            <Link key={s.href} href={s.href} className="card" style={{
+            <Link key={s.title} href={s.href} className="card" style={{
               display: 'flex', alignItems: 'center', gap: 'var(--space-md)',
+              background: 'rgba(15, 23, 42, 0.75)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
             }}>
               <div style={{
                 width: 50, height: 50, borderRadius: 'var(--radius-md)',
@@ -32,10 +34,10 @@ export default function PaymentsPage() {
                 {s.icon}
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ fontWeight: 600 }}>{s.title}</p>
+                <p style={{ fontWeight: 700, color: '#F8FAFC' }}>{s.title}</p>
                 <p className="text-muted" style={{ fontSize: '0.8rem' }}>{s.desc}</p>
               </div>
-              <span style={{ color: 'var(--text-muted)' }}>→</span>
+              <span style={{ color: '#38BDF8' }}>→</span>
             </Link>
           ))}
         </div>

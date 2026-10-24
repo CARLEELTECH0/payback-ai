@@ -21,7 +21,7 @@ export default function SignupPage() {
     if (!form.firstName.trim()) errs.firstName = 'First name is required';
     if (!form.lastName.trim()) errs.lastName = 'Last name is required';
     if (!form.email.includes('@')) errs.email = 'Enter a valid email';
-    if (!/^(\+234|0)[789]\d{9}$/.test(form.phone)) errs.phone = 'Enter a valid Nigerian phone number';
+    if (!form.phone.trim()) errs.phone = 'Phone number is required';
     if (form.password.length < 8) errs.password = 'Password must be at least 8 characters';
     if (form.password !== form.confirmPassword) errs.confirmPassword = 'Passwords do not match';
     return errs;
@@ -42,7 +42,7 @@ export default function SignupPage() {
         phone: form.phone,
         password: form.password,
       });
-      showToast('Account created! Welcome to AutoPay', 'success');
+      showToast('Account created! Welcome to PayBack AI', 'success');
       router.push('/dashboard');
     } catch (err) {
       setErrors({ form: err.message || 'Signup failed' });
@@ -53,10 +53,10 @@ export default function SignupPage() {
   };
 
   const fields = [
-    { id: 'firstName', label: 'First Name', type: 'text', placeholder: 'Chinedu', half: true },
-    { id: 'lastName', label: 'Last Name', type: 'text', placeholder: 'Okonkwo', half: true },
-    { id: 'email', label: 'Email', type: 'email', placeholder: 'you@example.com' },
-    { id: 'phone', label: 'Phone Number', type: 'tel', placeholder: '08012345678' },
+    { id: 'firstName', label: 'First Name', type: 'text', placeholder: 'Jordan', half: true },
+    { id: 'lastName', label: 'Last Name', type: 'text', placeholder: 'Lee', half: true },
+    { id: 'email', label: 'Email', type: 'email', placeholder: 'merchant@example.com' },
+    { id: 'phone', label: 'Phone Number', type: 'tel', placeholder: '+1 408 555 0199' },
     { id: 'password', label: 'Password', type: 'password', placeholder: 'Min. 8 characters' },
     { id: 'confirmPassword', label: 'Confirm Password', type: 'password', placeholder: 'Repeat password' },
   ];
@@ -66,7 +66,7 @@ export default function SignupPage() {
       <div className="container page-enter">
         <div className="text-center" style={{ marginBottom: 'var(--space-xl)' }}>
           <h1 style={{ marginBottom: 4 }}>Create Account</h1>
-          <p className="text-muted" style={{ fontSize: '0.9rem' }}>Join AutoPay Nigeria today</p>
+          <p className="text-muted" style={{ fontSize: '0.9rem' }}>Join PayBack AI Merchant Network</p>
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>

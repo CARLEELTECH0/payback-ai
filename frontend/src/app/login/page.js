@@ -42,17 +42,17 @@ export default function LoginPage() {
         <div className="text-center" style={{ marginBottom: '40px' }}>
           <div style={{
             width: 72, height: 72, margin: '0 auto 16px',
-            background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))',
-            borderRadius: 'var(--radius-xl)',
+            background: 'linear-gradient(135deg, #0070BA 0%, #003087 100%)',
+            borderRadius: '20px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: '2rem',
-            boxShadow: '0 8px 32px rgba(0, 166, 81, 0.3)',
+            boxShadow: '0 8px 32px rgba(0, 112, 186, 0.4)',
           }}>
-            ⚡
+            🛡️
           </div>
-          <h1 style={{ marginBottom: 4 }}>AutoPay</h1>
+          <h1 style={{ marginBottom: 4 }}>PayBack AI</h1>
           <p className="text-muted" style={{ fontSize: '0.9rem' }}>
-            Smart payment automation for Nigeria
+            PayPal Merchant Copilot & Autonomous Defense
           </p>
         </div>
 

@@ -3,11 +3,11 @@ import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/context/ToastContext';
 
 export const metadata = {
-  title: 'AutoPay Nigeria — Smart Payment Automation',
-  description: 'Automate your airtime, data, and electricity payments in Nigeria. Fast, secure, and reliable with Interswitch integration.',
-  keywords: 'AutoPay, Nigeria, airtime, data, electricity, payment, automation, Interswitch',
+  title: 'PayBack AI — Autonomous PayPal Dispute Defense & Churn Recovery',
+  description: 'Autonomous 60-Second Chargeback Defense & PayPal Pay Later Churn Bailout Engine for global merchants. Official submission for the PayPal AI Hackathon 2026.',
+  keywords: 'PayPal, PayBack AI, PayPal AI Hackathon 2026, Dispute Defense, Pay Later, Churn Bailout, Disputes API, Merchant Protection',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover',
-  themeColor: '#0A0E17',
+  themeColor: '#003087',
 };
 
 export default function RootLayout({ children }) {

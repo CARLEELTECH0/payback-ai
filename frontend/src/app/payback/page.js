@@ -172,6 +172,56 @@ export default function PayBackPage() {
 
   return (
     <div className="payback-container">
+      {/* PayPal Official Brand Bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '4px 0 14px 0',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        marginBottom: '16px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{
+            width: '28px',
+            height: '28px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <svg viewBox="0 0 240 240" width="28" height="28" fill="none">
+              <path d="M58 35 h58 c24 0 42 13 42 37 c0 25 -20 41 -46 41 h-22 l-12 72 h-20 z" fill="#002F86" />
+              <path d="M82 62 h56 c22 0 39 12 39 35 c0 24 -19 39 -43 39 h-21 l-11 67 h-20 z" fill="#0079C1" opacity="0.95" />
+            </svg>
+          </div>
+          <div>
+            <span style={{ fontSize: '15px', fontWeight: '900', color: '#F8FAFC', letterSpacing: '-0.3px' }}>
+              PayPal <span style={{ color: '#0079C1' }}>Developer</span>
+            </span>
+            <span style={{ fontSize: '10.5px', color: '#64748B', marginLeft: '6px', fontWeight: 600 }}>
+              | AI Hackathon 2026
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '5px',
+            background: 'rgba(0, 112, 186, 0.15)',
+            border: '1px solid rgba(0, 112, 186, 0.3)',
+            padding: '3px 10px',
+            borderRadius: '20px',
+            fontSize: '11px',
+            fontWeight: 700,
+            color: '#38BDF8',
+          }}>
+            <span>🔒</span> Verified Partner
+          </div>
+        </div>
+      </div>
+
       {/* Top Banner Status Bar */}
       <div className="payback-top-bar">
         <div className="payback-top-status">
@@ -187,12 +237,12 @@ export default function PayBackPage() {
             }}
           />
           <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#E2E8F0', letterSpacing: '0.2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            PayPal API v1/disputes • <strong style={{ color: '#10B981' }}>Sandbox Active</strong>
+            PayPal API v1/customer/disputes • <strong style={{ color: '#10B981' }}>OAuth 2.0 Connected</strong>
           </span>
         </div>
 
         <div className="payback-badge-tag">
-          PAYPAL AI 2026
+          SANDBOX LIVE
         </div>
       </div>
 
@@ -206,7 +256,7 @@ export default function PayBackPage() {
             PayBack <span style={{ color: '#38BDF8', fontWeight: '800' }}>AI Copilot</span>
           </h1>
           <p className="payback-subtitle">
-            Autonomous 60-Second Chargeback Defense & Pay Later Dunning Engine
+            Autonomous 60-Second PayPal Chargeback Defense & Pay Later Dunning Engine
           </p>
         </div>
       </div>
@@ -748,7 +798,7 @@ export default function PayBackPage() {
                 {[
                   { time: 'T-3m 00s', label: 'User Login & 2FA Session Authenticated', ip: '102.89.33.14' },
                   { time: 'T-0m 00s', label: 'Transaction Initiated & Double-Entry Ledger Debited', ip: '102.89.33.14' },
-                  { time: 'T+0m 01s', label: 'Digital Token Dispatched via Biller Gateway (Code 90000)', ip: 'AutoPay/Worker' },
+                  { time: 'T+0m 01s', label: 'Digital Token Dispatched via Biller Gateway (Code 90000)', ip: 'PayPal/PayBackWorker' },
                   { time: 'T+0m 45s', label: 'Post-Purchase Activity: Receipt Viewed & Account Active', ip: '102.89.33.14' },
                 ].map((step, idx) => (
                   <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>

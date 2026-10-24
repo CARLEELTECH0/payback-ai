@@ -1,50 +1,52 @@
 /* ============================================
-   AutoPay Nigeria — Global Design System
-   Premium Nigerian Fintech & Liquid Glass
+   PayBack AI — PayPal Developer & Merchant Platform
+   Official PayPal Design System & Liquid Glass
    ============================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 /* ---- CSS Variables ---- */
 :root {
-  /* Nigerian Flag Palette */
-  --primary: #008751;        /* Official Nigerian Flag Green */
-  --primary-light: #10B981;
-  --primary-dark: #005b36;
-  --primary-glow: rgba(0, 135, 81, 0.15);
+  /* Official PayPal Palette */
+  --primary: #0070BA;         /* PayPal Vibrant Brand Blue */
+  --primary-light: #0079C1;   /* PayPal Light Blue */
+  --primary-dark: #003087;    /* PayPal Deep Marine Navy */
+  --primary-navy: #001C64;    /* PayPal Darkest Midnight */
+  --primary-glow: rgba(0, 112, 186, 0.2);
 
-  --accent: #FFD700;          
-  --accent-light: #FFE44D;
+  --accent: #FFC439;          /* Iconic PayPal Button Gold */
+  --accent-light: #FFE07D;
+  --accent-dark: #F29E02;
 
-  /* Premium Light Fintech Theme (Moniepoint / OPay style) */
-  --bg-primary: #F8FAFC;      /* Ultra-clean off-white */
-  --bg-secondary: #F1F5F9;    
-  --bg-card: rgba(255, 255, 255, 0.75); /* Clean, high-quality frosted white glass */
-  --bg-card-hover: rgba(255, 255, 255, 0.9);
-  --bg-elevated: #FFFFFF;
+  /* Premium Cyber & Dark Fintech Theme (PayPal Developer / Enterprise) */
+  --bg-primary: #080C15;      /* PayPal Deep Slate Midnight */
+  --bg-secondary: #0F172A;    
+  --bg-card: rgba(15, 23, 42, 0.75); /* High-grade frosted glass */
+  --bg-card-hover: rgba(30, 41, 59, 0.85);
+  --bg-elevated: #1E293B;
 
   /* Text: Clean, High Contrast */
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
-  --text-accent: #008751;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-accent: #38BDF8;
 
   /* Status */
-  --success: #10B981;
+  --success: #00A859;        /* PayPal Security Green */
   --warning: #F59E0B;
   --error: #EF4444;
-  --info: #3B82F6;
+  --info: #0070BA;
 
   /* Borders / Frosted Edges */
-  --border: rgba(255, 255, 255, 0.5);
-  --border-light: rgba(255, 255, 255, 0.8);
-  --border-focus: #008751;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.16);
+  --border-focus: #0070BA;
 
-  /* Soft, Professional Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 20px rgba(0, 135, 81, 0.1);
+  /* Soft, Professional PayPal Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 24px rgba(0, 112, 186, 0.25);
 
   /* Radius */
   --radius-sm: 8px;
@@ -91,18 +93,19 @@ body {
   position: relative;
 }
 
-/* 🇳🇬 PERFECTLY ALIGNED NIGERIA FLAG MAP 🇳🇬 */
+/* 🅿️ PAYPAL ENTERPRISE BRAND WATERMARK & AMBIENT MESH 🅿️ */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url('/nigeria_flag.svg');
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(0, 112, 186, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(0, 48, 135, 0.09) 0%, transparent 50%),
+    url('/paypal_monogram.svg');
   background-repeat: no-repeat;
-  /* Always keep the map perfectly centered and scaled to the viewport height so it never clips */
-  background-position: center center;
-  background-size: auto 75vh; 
-  /* Softer opacity so it acts as an elegant watermark behind the glass, not a blinding distortion */
-  opacity: 0.12; 
+  background-position: center center, center center, center center;
+  background-size: 100% 100%, 100% 100%, auto 55vh; 
+  opacity: 0.06; 
   z-index: -2;
   pointer-events: none;
 }
@@ -521,15 +524,16 @@ select.input {
   color: #38BDF8;
 }
 
-/* ---- Wallet Card ---- */
+/* ---- Wallet Card (PayPal Merchant Account) ---- */
 .wallet-card {
-  background: linear-gradient(135deg, #00A651 0%, #008542 50%, #006B35 100%);
+  background: linear-gradient(135deg, #0070BA 0%, #003087 50%, #001C64 100%);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
   color: white;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 166, 81, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 112, 186, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .wallet-card::before {

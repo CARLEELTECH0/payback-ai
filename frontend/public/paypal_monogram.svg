@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="ppNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002F86" />
+      <stop offset="100%" stop-color="#001A52" />
+    </linearGradient>
+    <linearGradient id="ppBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0079C1" />
+      <stop offset="100%" stop-color="#00457C" />
+    </linearGradient>
+    <linearGradient id="ppOverlap" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002663" />
+      <stop offset="100%" stop-color="#001A52" />
+    </linearGradient>
+  </defs>
+  <!-- Rear P (Deep Navy) -->
+  <path d="M58 35 h58 c24 0 42 13 42 37 c0 25 -20 41 -46 41 h-22 l-12 72 h-20 z" fill="url(#ppNavy)" />
+  <!-- Overlap and Front P (Vibrant PayPal Blue) -->
+  <path d="M82 62 h56 c22 0 39 12 39 35 c0 24 -19 39 -43 39 h-21 l-11 67 h-20 z" fill="url(#ppBlue)" opacity="0.92" />
+  <!-- Intersection Accent -->
+  <path d="M82 62 h28 l-10 61 h19 c24 0 43 -15 43 -39 c0 -2 -0.2 -4.5 -0.6 -6.5 c-6.5 12 -19 19.5 -35 19.5 h-25 z" fill="url(#ppOverlap)" opacity="0.4" />
+</svg>

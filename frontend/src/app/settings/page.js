@@ -78,8 +78,8 @@ export default function SettingsPage() {
           Sign Out
         </button>
 
-        <p className="text-center text-muted" style={{ fontSize: '0.7rem', paddingBottom: 'var(--space-lg)' }}>
-          AutoPay Nigeria v1.0.0 • Powered by Interswitch
+        <p className="text-center text-muted" style={{ fontSize: '0.75rem', paddingBottom: 'var(--space-lg)' }}>
+          PayBack AI by PayPal • PayPal AI Hackathon 2026 Edition • Disputes API v1
         </p>
       </div>
       <BottomNav />

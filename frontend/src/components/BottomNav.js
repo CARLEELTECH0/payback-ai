@@ -4,12 +4,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/dashboard', label: 'Home', icon: '🏠' },
-  { href: '/payments', label: 'Pay', icon: '💸' },
-  { href: '/autopay', label: 'AutoPay', icon: '🔄' },
-  { href: '/payback', label: 'PayBack', icon: '🛡️' },
-  { href: '/history', label: 'History', icon: '📋' },
-  { href: '/settings', label: 'More', icon: '⚙️' },
+  { href: '/payback', label: 'PayBack AI', icon: '🛡️' },
+  { href: '/dashboard', label: 'Merchant Hub', icon: '💼' },
+  { href: '/payments', label: 'Send & Pay', icon: '💳' },
+  { href: '/history', label: 'Activity', icon: '📋' },
+  { href: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 
 export default function BottomNav() {
