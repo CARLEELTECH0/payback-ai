@@ -286,6 +286,7 @@ export default function PayBackPage() {
           marginBottom: '24px',
         }}>
           <button
+            id="tab-disputes"
             onClick={() => setActiveTab('disputes')}
             style={{
               padding: '12px 18px',
@@ -317,6 +318,7 @@ export default function PayBackPage() {
           </button>
 
           <button
+            id="tab-churn"
             onClick={() => setActiveTab('churn')}
             style={{
               padding: '12px 18px',
@@ -594,6 +596,8 @@ export default function PayBackPage() {
                   return (
                     <div
                       key={dispute.id}
+                      className="dispute-case-card"
+                      data-testid="dispute-case-card"
                       onClick={() => setActiveDossier(dispute)}
                       style={{
                         background: isDark ? 'rgba(30, 41, 59, 0.6)' : '#FFFFFF',
@@ -742,6 +746,7 @@ export default function PayBackPage() {
                 </div>
 
                 <button
+                  id="deploy-bailout-btn"
                   onClick={handleDeployPayLaterRescue}
                   disabled={rescuing}
                   className="btn-paypal-gold-pill"
@@ -983,6 +988,7 @@ export default function PayBackPage() {
                 background: isDark ? '#1E293B' : '#F8FAFC',
               }}>
                 <button
+                  id="close-drawer-btn"
                   onClick={() => setActiveDossier(null)}
                   className="btn-paypal-outline-pill"
                   style={{ flex: 1 }}
