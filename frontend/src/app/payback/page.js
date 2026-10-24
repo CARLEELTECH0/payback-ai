@@ -47,7 +47,12 @@ export default function PayBackPage() {
       const res = await api.getPaybackDisputes();
       if (res.success && res.data) {
         setMetrics(res.data.metrics);
-        setDisputes(res.data.disputes);
+        const mappedDisputes = (res.data.disputes || []).map((d, idx) => ({
+          ...d,
+          buyer_name: d.buyer_name || (idx % 2 === 0 ? 'Alex Rivera' : 'Samantha Vance'),
+          buyer_email: d.buyer_email || (idx % 2 === 0 ? 'alex.rivera@example.com' : 'samantha.v@example.com'),
+        }));
+        setDisputes(mappedDisputes);
       }
     } catch (err) {
       setDisputes([
@@ -471,6 +476,7 @@ export default function PayBackPage() {
                 </div>
 
                 <button
+                  id="simulate-dispute-btn"
                   onClick={() => setShowSimModal(true)}
                   disabled={simulating}
                   className="btn-paypal-pill"
@@ -642,10 +648,15 @@ export default function PayBackPage() {
                           {dispute.confidence_score ? `${dispute.confidence_score}% Confidence` : '98% Win Score'}
                         </div>
                         <button
-                          className="btn-paypal-outline-pill"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActiveDossier(dispute);
+                          }}
+                          className="btn-paypal-outline-pill view-dossier-btn"
+                          data-testid="view-dossier-btn"
                           style={{ marginTop: '8px', padding: '4px 12px', fontSize: '11px' }}
                         >
-                          View Dossier →
+                          View Evidence Dossier →
                         </button>
                       </div>
                     </div>

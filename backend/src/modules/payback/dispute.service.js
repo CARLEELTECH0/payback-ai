@@ -139,6 +139,8 @@ class DisputeManagementService {
         {
           id: 'mock-1',
           paypal_dispute_id: 'PP-D-882194',
+          buyer_name: 'Alex Rivera',
+          buyer_email: 'alex.rivera@example.com',
           dispute_amount: '75.00',
           dispute_currency: 'USD',
           reason: 'MERCHANDISE_OR_SERVICE_NOT_RECEIVED',
@@ -150,6 +152,8 @@ class DisputeManagementService {
         {
           id: 'mock-2',
           paypal_dispute_id: 'PP-D-771923',
+          buyer_name: 'Samantha Vance',
+          buyer_email: 'samantha.v@example.com',
           dispute_amount: '120.00',
           dispute_currency: 'USD',
           reason: 'UNAUTHORIZED_TRANSACTION',

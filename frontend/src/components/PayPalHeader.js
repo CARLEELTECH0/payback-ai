@@ -131,6 +131,7 @@ export default function PayPalHeader({ theme: propTheme, onToggleTheme: propOnTo
 
           {/* Theme Switcher Button */}
           <button
+            id="theme-toggle-btn"
             onClick={handleToggle}
             title={`Switch to ${isDark ? 'Enterprise Light' : 'Developer Dark'} mode`}
             style={{
