@@ -171,269 +171,142 @@ export default function PayBackPage() {
   });
 
   return (
-    <div
-      className="app-container"
-      style={{
-        maxWidth: '820px',
-        margin: '0 auto',
-        padding: '20px 16px 100px 16px',
-        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-      }}
-    >
+    <div className="payback-container">
       {/* Top Banner Status Bar */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          background: 'rgba(15, 23, 42, 0.75)',
-          backdropFilter: 'blur(16px)',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
-          borderRadius: '14px',
-          padding: '10px 16px',
-          marginBottom: '20px',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="payback-top-bar">
+        <div className="payback-top-status">
           <span
             style={{
-              width: '10px',
-              height: '10px',
+              width: '9px',
+              height: '9px',
               borderRadius: '50%',
               background: '#10B981',
               boxShadow: '0 0 10px #10B981',
               display: 'inline-block',
+              flexShrink: 0,
             }}
           />
-          <span style={{ fontSize: '12px', fontWeight: '600', color: '#E2E8F0', letterSpacing: '0.3px' }}>
-            PayPal API v1/customer/disputes • <strong style={{ color: '#10B981' }}>Sandbox Active</strong>
+          <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#E2E8F0', letterSpacing: '0.2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            PayPal API v1/disputes • <strong style={{ color: '#10B981' }}>Sandbox Active</strong>
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span
-            style={{
-              fontSize: '11px',
-              fontWeight: '700',
-              background: 'linear-gradient(135deg, #0070BA 0%, #003087 100%)',
-              color: '#fff',
-              padding: '3px 10px',
-              borderRadius: '20px',
-              letterSpacing: '0.4px',
-            }}
-          >
-            PAYPAL AI 2026
-          </span>
+        <div className="payback-badge-tag">
+          PAYPAL AI 2026
         </div>
       </div>
 
       {/* Hero Header Section */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-          <div
-            style={{
-              width: '46px',
-              height: '46px',
-              borderRadius: '14px',
-              background: 'linear-gradient(135deg, #0070BA 0%, #10B981 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '24px',
-              boxShadow: '0 8px 24px rgba(0, 112, 186, 0.35)',
-            }}
-          >
-            🛡️
-          </div>
-          <div>
-            <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#F8FAFC', margin: 0, letterSpacing: '-0.5px' }}>
-              PayBack <span style={{ color: '#38BDF8', fontWeight: '800' }}>AI Copilot</span>
-            </h1>
-            <p style={{ margin: 0, fontSize: '13px', color: '#94A3B8' }}>
-              Autonomous 60-Second Chargeback Defense & Pay Later Dunning Engine
-            </p>
-          </div>
+      <div className="payback-header">
+        <div className="payback-header-icon">
+          🛡️
+        </div>
+        <div>
+          <h1 className="payback-title">
+            PayBack <span style={{ color: '#38BDF8', fontWeight: '800' }}>AI Copilot</span>
+          </h1>
+          <p className="payback-subtitle">
+            Autonomous 60-Second Chargeback Defense & Pay Later Dunning Engine
+          </p>
         </div>
       </div>
 
       {/* Navigation Switch Tabs */}
-      <div
-        style={{
-          display: 'flex',
-          gap: '6px',
-          background: 'rgba(15, 23, 42, 0.6)',
-          backdropFilter: 'blur(12px)',
-          padding: '6px',
-          borderRadius: '14px',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
-          marginBottom: '24px',
-        }}
-      >
+      <div className="payback-tabs">
         <button
           onClick={() => setActiveTab('disputes')}
+          className="payback-tab-btn"
           style={{
-            flex: 1,
-            padding: '12px 16px',
-            borderRadius: '10px',
-            border: 'none',
-            fontSize: '13px',
-            fontWeight: '700',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
             background: activeTab === 'disputes' ? 'linear-gradient(135deg, #0070BA 0%, #00509E 100%)' : 'transparent',
             color: activeTab === 'disputes' ? '#FFFFFF' : '#94A3B8',
             boxShadow: activeTab === 'disputes' ? '0 4px 16px rgba(0, 112, 186, 0.4)' : 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
           }}
         >
-          <span>🛡️</span> Dispute Defense Shield
+          <span>🛡️</span> Dispute Shield
         </button>
 
         <button
           onClick={() => setActiveTab('churn')}
+          className="payback-tab-btn"
           style={{
-            flex: 1,
-            padding: '12px 16px',
-            borderRadius: '10px',
-            border: 'none',
-            fontSize: '13px',
-            fontWeight: '700',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
             background: activeTab === 'churn' ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'transparent',
             color: activeTab === 'churn' ? '#FFFFFF' : '#94A3B8',
             boxShadow: activeTab === 'churn' ? '0 4px 16px rgba(16, 185, 129, 0.35)' : 'none',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
           }}
         >
-          <span>🔄</span> Pay Later Churn Bailout
+          <span>🔄</span> Pay Later Churn
         </button>
       </div>
 
       {activeTab === 'disputes' ? (
         <>
           {/* Real-time KPI Metric Cards */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: '14px',
-              marginBottom: '24px',
-            }}
-          >
+          <div className="payback-kpi-grid">
             {/* Card 1: Protected Capital */}
-            <div
-              style={{
-                background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%)',
-                backdropFilter: 'blur(16px)',
-                padding: '20px 18px',
-                borderRadius: '16px',
-                border: '1px solid rgba(16, 185, 129, 0.25)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                Protected Capital
+            <div className="payback-kpi-card" style={{ border: '1px solid rgba(16, 185, 129, 0.25)' }}>
+              <div>
+                <div className="payback-kpi-title">
+                  Protected Capital
+                </div>
+                <div className="payback-kpi-value" style={{ color: '#10B981' }}>
+                  ${metrics.totalProtectedUSD}
+                  <span style={{ fontSize: '11px', fontWeight: '600', color: '#64748B', marginLeft: '3px' }}>USD</span>
+                </div>
               </div>
-              <div style={{ fontSize: '28px', fontWeight: '900', color: '#10B981', marginTop: '6px', letterSpacing: '-0.5px' }}>
-                ${metrics.totalProtectedUSD}
-                <span style={{ fontSize: '13px', fontWeight: '600', color: '#64748B', marginLeft: '4px' }}>USD</span>
-              </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '8px', fontSize: '11px', fontWeight: '700', color: '#10B981', background: 'rgba(16, 185, 129, 0.15)', padding: '2px 8px', borderRadius: '12px' }}>
-                ↑ 100% Capital Retained
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '6px', fontSize: '10.5px', fontWeight: '700', color: '#10B981', background: 'rgba(16, 185, 129, 0.15)', padding: '2px 7px', borderRadius: '10px', width: 'fit-content' }}>
+                ↑ 100% Retained
               </div>
             </div>
 
             {/* Card 2: Win Rate */}
-            <div
-              style={{
-                background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%)',
-                backdropFilter: 'blur(16px)',
-                padding: '20px 18px',
-                borderRadius: '16px',
-                border: '1px solid rgba(56, 189, 248, 0.25)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-              }}
-            >
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                AI Defense Win Rate
+            <div className="payback-kpi-card" style={{ border: '1px solid rgba(56, 189, 248, 0.25)' }}>
+              <div>
+                <div className="payback-kpi-title">
+                  AI Win Rate
+                </div>
+                <div className="payback-kpi-value" style={{ color: '#38BDF8' }}>
+                  {metrics.winRatePercentage}%
+                </div>
               </div>
-              <div style={{ fontSize: '28px', fontWeight: '900', color: '#38BDF8', marginTop: '6px', letterSpacing: '-0.5px' }}>
-                {metrics.winRatePercentage}%
-              </div>
-              <div style={{ marginTop: '8px', fontSize: '11px', color: '#94A3B8' }}>
-                Adjudication Benchmark: <strong>Top 1%</strong>
+              <div className="payback-kpi-sub" style={{ color: '#94A3B8' }}>
+                Benchmark: <strong style={{ color: '#38BDF8' }}>Top 1%</strong>
               </div>
             </div>
 
             {/* Card 3: Avg Response Time */}
-            <div
-              style={{
-                background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%)',
-                backdropFilter: 'blur(16px)',
-                padding: '20px 18px',
-                borderRadius: '16px',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-              }}
-            >
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                AI Latency Speed
+            <div className="payback-kpi-card" style={{ border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <div>
+                <div className="payback-kpi-title">
+                  Defense Speed
+                </div>
+                <div className="payback-kpi-value" style={{ color: '#F8FAFC' }}>
+                  {metrics.avgResponseTimeSeconds}s
+                </div>
               </div>
-              <div style={{ fontSize: '28px', fontWeight: '900', color: '#F8FAFC', marginTop: '6px', letterSpacing: '-0.5px' }}>
-                {metrics.avgResponseTimeSeconds}s
-              </div>
-              <div style={{ marginTop: '8px', fontSize: '11px', color: '#94A3B8' }}>
-                Manual Average: <strike>45 mins</strike>
+              <div className="payback-kpi-sub" style={{ color: '#94A3B8' }}>
+                Manual: <strike>45 mins</strike>
               </div>
             </div>
 
             {/* Card 4: Penalties Avoided */}
-            <div
-              style={{
-                background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%)',
-                backdropFilter: 'blur(16px)',
-                padding: '20px 18px',
-                borderRadius: '16px',
-                border: '1px solid rgba(245, 158, 11, 0.25)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)',
-              }}
-            >
-              <div style={{ fontSize: '12px', fontWeight: '600', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                Dispute Fees Avoided
+            <div className="payback-kpi-card" style={{ border: '1px solid rgba(245, 158, 11, 0.25)' }}>
+              <div>
+                <div className="payback-kpi-title">
+                  Fees Avoided
+                </div>
+                <div className="payback-kpi-value" style={{ color: '#F59E0B' }}>
+                  $40.00
+                </div>
               </div>
-              <div style={{ fontSize: '28px', fontWeight: '900', color: '#F59E0B', marginTop: '6px', letterSpacing: '-0.5px' }}>
-                $40.00
-              </div>
-              <div style={{ marginTop: '8px', fontSize: '11px', color: '#94A3B8' }}>
-                Zero PayPal Penalty Fees
+              <div className="payback-kpi-sub" style={{ color: '#94A3B8' }}>
+                Zero PayPal Penalties
               </div>
             </div>
           </div>
 
           {/* Interactive Live Defense Console (Hero Feature for Hackathon Judges) */}
-          <div
-            style={{
-              background: 'linear-gradient(145deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.7) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
-              borderRadius: '20px',
-              padding: '24px',
-              boxShadow: '0 12px 32px rgba(0, 112, 186, 0.15)',
-              marginBottom: '28px',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px', marginBottom: '16px' }}>
+          <div className="payback-console-card">
+            <div className="payback-console-header">
               <div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(56, 189, 248, 0.15)', padding: '3px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '700', color: '#38BDF8', marginBottom: '8px' }}>
                   <span>⚡</span> LIVE EVALUATION ENGINE
@@ -441,7 +314,7 @@ export default function PayBackPage() {
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#F8FAFC' }}>
                   Simulate Live PayPal Chargeback Defense
                 </h3>
-                <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#94A3B8' }}>
+                <p style={{ margin: '4px 0 0 0', fontSize: '12.5px', color: '#94A3B8', lineHeight: '1.4' }}>
                   Triggers an incoming PayPal dispute webhook and watches PayBack assemble PostgreSQL logs & submit proof to the PayPal Disputes API in 1.4s.
                 </p>
               </div>
@@ -449,23 +322,9 @@ export default function PayBackPage() {
               <button
                 onClick={() => setShowSimModal(true)}
                 disabled={simulating}
-                style={{
-                  background: 'linear-gradient(135deg, #0070BA 0%, #0284C7 100%)',
-                  color: '#FFFFFF',
-                  padding: '12px 22px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  fontSize: '14px',
-                  fontWeight: '700',
-                  cursor: simulating ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 6px 20px rgba(0, 112, 186, 0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'transform 0.15s ease',
-                }}
+                className="payback-btn-primary"
               >
-                {simulating ? '⏳ Defense In Flight...' : '⚡ Trigger Incoming PayPal Dispute'}
+                {simulating ? '⏳ Defense In Flight...' : '⚡ Trigger PayPal Dispute'}
               </button>
             </div>
 
@@ -497,20 +356,24 @@ export default function PayBackPage() {
                   background: '#0B0F19',
                   borderRadius: '12px',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '14px',
+                  padding: '12px',
                   fontFamily: "'Space Mono', monospace",
-                  fontSize: '12px',
-                  lineHeight: '1.7',
+                  fontSize: '11px',
+                  lineHeight: '1.6',
+                  maxHeight: '220px',
+                  overflowY: 'auto',
+                  WebkitOverflowScrolling: 'touch',
+                  wordBreak: 'break-word',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EF4444' }} />
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B' }} />
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981' }} />
-                  <span style={{ fontSize: '11px', color: '#64748B', marginLeft: '6px' }}>payback-telemetry-engine.log</span>
+                  <span style={{ fontSize: '10.5px', color: '#64748B', marginLeft: '6px' }}>payback-telemetry-engine.log</span>
                 </div>
                 {simulationLog.map((log, idx) => (
-                  <div key={idx} style={{ color: log.includes('✅') ? '#34D399' : '#38BDF8' }}>
+                  <div key={idx} style={{ color: log.includes('✅') ? '#34D399' : '#38BDF8', fontSize: '11px' }}>
                     {log}
                   </div>
                 ))}
@@ -520,44 +383,28 @@ export default function PayBackPage() {
 
           {/* Dispute Radar Table / List */}
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
+            <div className="payback-radar-header">
               <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#F8FAFC', margin: 0 }}>
                 Dispute Defense Radar ({filteredDisputes.length})
               </h3>
 
               {/* Status Filters & Search */}
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="payback-radar-controls">
                 <input
                   type="text"
                   placeholder="Search by Case ID..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    background: 'rgba(15, 23, 42, 0.6)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    padding: '6px 12px',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    color: '#F8FAFC',
-                    outline: 'none',
-                  }}
+                  className="payback-input-search"
                 />
 
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  style={{
-                    background: 'rgba(15, 23, 42, 0.6)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    padding: '6px 10px',
-                    borderRadius: '8px',
-                    fontSize: '12px',
-                    color: '#F8FAFC',
-                    outline: 'none',
-                  }}
+                  className="payback-select-filter"
                 >
                   <option value="ALL">All Statuses</option>
-                  <option value="EVIDENCE_SUBMITTED">Evidence Submitted</option>
+                  <option value="EVIDENCE_SUBMITTED">Submitted</option>
                   <option value="RESOLVED_MERCHANT_WIN">Merchant Won</option>
                   <option value="UNDER_REVIEW">Under Review</option>
                 </select>
@@ -572,47 +419,37 @@ export default function PayBackPage() {
                   <div
                     key={dispute.id}
                     onClick={() => setActiveDossier(dispute)}
-                    style={{
-                      background: 'rgba(30, 41, 59, 0.6)',
-                      backdropFilter: 'blur(12px)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      borderRadius: '14px',
-                      padding: '16px',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}
+                    className="payback-dispute-row"
                   >
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontWeight: '800', color: '#F8FAFC', fontSize: '15px' }}>
+                    <div style={{ minWidth: 0, flex: '1 1 auto' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <span style={{ fontWeight: '800', color: '#F8FAFC', fontSize: '14.5px' }}>
                           {dispute.paypal_dispute_id}
                         </span>
                         <span
                           style={{
-                            fontSize: '11px',
+                            fontSize: '10.5px',
                             fontWeight: '700',
-                            padding: '3px 8px',
-                            borderRadius: '8px',
+                            padding: '2px 8px',
+                            borderRadius: '6px',
                             background: isWon ? 'rgba(16, 185, 129, 0.2)' : 'rgba(56, 189, 248, 0.2)',
                             color: isWon ? '#10B981' : '#38BDF8',
+                            whiteSpace: 'nowrap',
                           }}
                         >
                           {isWon ? 'WON • 100% CAPITAL RETAINED' : 'EVIDENCE SUBMITTED'}
                         </span>
                       </div>
 
-                      <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '4px' }}>
-                        Claim: <strong>{dispute.reason?.replace(/_/g, ' ')}</strong> • Target: Utility Direct Dispatch
+                      <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        Claim: <strong>{dispute.reason?.replace(/_/g, ' ')}</strong> • Target: Utility Direct
                       </div>
                     </div>
 
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: '17px', fontWeight: '900', color: '#F8FAFC' }}>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ fontSize: '16px', fontWeight: '900', color: '#F8FAFC' }}>
                         ${dispute.dispute_amount}{' '}
-                        <span style={{ fontSize: '11px', fontWeight: '600', color: '#64748B' }}>USD</span>
+                        <span style={{ fontSize: '10.5px', fontWeight: '600', color: '#64748B' }}>USD</span>
                       </div>
                       <div style={{ fontSize: '11px', color: '#10B981', fontWeight: '700', marginTop: '2px' }}>
                         {dispute.confidence_score ? `${dispute.confidence_score}% Confidence` : '95% Score'}
@@ -631,9 +468,10 @@ export default function PayBackPage() {
             style={{
               background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%)',
               backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               border: '1px solid rgba(16, 185, 129, 0.3)',
               borderRadius: '20px',
-              padding: '24px',
+              padding: '20px 16px',
               marginBottom: '24px',
               boxShadow: '0 12px 32px rgba(16, 185, 129, 0.1)',
             }}
@@ -641,20 +479,20 @@ export default function PayBackPage() {
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.15)', padding: '3px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '700', color: '#10B981', marginBottom: '8px' }}>
               <span>🔄</span> PREDICTIVE DUNNING ENGINE
             </div>
-            <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#F8FAFC', margin: 0 }}>
+            <h2 style={{ fontSize: '19px', fontWeight: '800', color: '#F8FAFC', margin: 0, lineHeight: '1.3' }}>
               Convert Failed Recurring Payments into PayPal Pay Later
             </h2>
-            <p style={{ margin: '6px 0 20px 0', fontSize: '13px', color: '#94A3B8' }}>
+            <p style={{ margin: '6px 0 18px 0', fontSize: '12.5px', color: '#94A3B8', lineHeight: '1.4' }}>
               Traditional dunning blindly retries cards on fixed days until subscribers churn. PayBack detects cashflow crunches and dynamically deploys interest-free <strong>PayPal Pay in 4</strong> installment offers.
             </p>
 
             {/* Comparison Visual */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '20px' }}>
-              <div style={{ background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '14px', padding: '16px' }}>
-                <div style={{ fontSize: '13px', fontWeight: '800', color: '#EF4444', marginBottom: '4px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '18px' }}>
+              <div style={{ background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '14px', padding: '14px' }}>
+                <div style={{ fontSize: '12.5px', fontWeight: '800', color: '#EF4444', marginBottom: '4px' }}>
                   ❌ Traditional Dunning (Stripe / Static)
                 </div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', lineHeight: '1.5' }}>
+                <div style={{ fontSize: '11.5px', color: '#94A3B8', lineHeight: '1.5' }}>
                   • Payment fails on 18th.<br />
                   • Blind retries fail on 19th, 20th.<br />
                   • Account cancelled on 21st.<br />
@@ -662,11 +500,11 @@ export default function PayBackPage() {
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '14px', padding: '16px' }}>
-                <div style={{ fontSize: '13px', fontWeight: '800', color: '#10B981', marginBottom: '4px' }}>
+              <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '14px', padding: '14px' }}>
+                <div style={{ fontSize: '12.5px', fontWeight: '800', color: '#10B981', marginBottom: '4px' }}>
                   ✅ PayBack AI + PayPal Pay Later
                 </div>
-                <div style={{ fontSize: '12px', color: '#94A3B8', lineHeight: '1.5' }}>
+                <div style={{ fontSize: '11.5px', color: '#94A3B8', lineHeight: '1.5' }}>
                   • Payment fails on 18th.<br />
                   • AI detects liquidity delay.<br />
                   • Dispatches 4 x $13.50 Pay in 4 invoice.<br />
@@ -676,16 +514,16 @@ export default function PayBackPage() {
             </div>
 
             {/* Active Simulation Card */}
-            <div style={{ background: '#0F172A', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '18px', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+            <div style={{ background: '#0F172A', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '16px', marginBottom: '18px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#EF4444' }}>
+                  <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#EF4444' }}>
                     ⚠️ Failed Recurring Debit Intercepted (BullMQ Queue)
                   </div>
-                  <div style={{ fontSize: '15px', fontWeight: '800', color: '#F8FAFC', marginTop: '4px' }}>
+                  <div style={{ fontSize: '14.5px', fontWeight: '800', color: '#F8FAFC', marginTop: '4px', wordBreak: 'break-all' }}>
                     dev.subscriber@example.com
                   </div>
-                  <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '2px' }}>
+                  <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '2px' }}>
                     Plan: Enterprise SaaS Tier • Amount: $60.00/month • Reason: Insufficient Funds
                   </div>
                 </div>
@@ -693,15 +531,9 @@ export default function PayBackPage() {
                 <button
                   onClick={handleDeployPayLaterRescue}
                   disabled={rescuing}
+                  className="payback-btn-primary"
                   style={{
                     background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    borderRadius: '10px',
-                    padding: '12px 20px',
-                    fontWeight: '700',
-                    fontSize: '13px',
-                    cursor: rescuing ? 'not-allowed' : 'pointer',
                     boxShadow: '0 4px 16px rgba(16, 185, 129, 0.3)',
                   }}
                 >
@@ -717,27 +549,27 @@ export default function PayBackPage() {
                   background: 'linear-gradient(145deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%)',
                   border: '1px solid #10B981',
                   borderRadius: '16px',
-                  padding: '20px',
+                  padding: '16px',
                   marginTop: '16px',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                   <span style={{ fontSize: '22px' }}>🎉</span>
                   <div>
-                    <div style={{ fontSize: '16px', fontWeight: '800', color: '#10B981' }}>
+                    <div style={{ fontSize: '15px', fontWeight: '800', color: '#10B981' }}>
                       Subscriber Successfully Retained via PayPal!
                     </div>
-                    <div style={{ fontSize: '12px', color: '#E2E8F0' }}>
-                      PayPal Invoicing API dispatched dynamic bailout offer with zero human friction.
+                    <div style={{ fontSize: '11.5px', color: '#E2E8F0' }}>
+                      PayPal Invoicing API dispatched dynamic bailout offer with zero friction.
                     </div>
                   </div>
                 </div>
 
                 {/* 4-Installment Pill Breakdown */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px', margin: '14px 0' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', margin: '14px 0' }}>
                   {['Today: $13.50', '2 Weeks: $13.50', '4 Weeks: $13.50', '6 Weeks: $13.50'].map((inst, i) => (
-                    <div key={i} style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '10px', borderRadius: '10px', textAlign: 'center', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-                      <div style={{ fontSize: '10px', color: '#94A3B8' }}>Installment {i + 1}</div>
+                    <div key={i} style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '10px 8px', borderRadius: '10px', textAlign: 'center', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                      <div style={{ fontSize: '9.5px', color: '#94A3B8' }}>Installment {i + 1}</div>
                       <div style={{ fontSize: '13px', fontWeight: '800', color: '#10B981' }}>{inst.split(': ')[1]}</div>
                     </div>
                   ))}
@@ -754,34 +586,10 @@ export default function PayBackPage() {
 
       {/* Forensic Evidence Dossier Inspector Modal */}
       {activeDossier && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0, 0, 0, 0.85)',
-            backdropFilter: 'blur(10px)',
-            zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '16px',
-          }}
-        >
-          <div
-            style={{
-              background: '#0F172A',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: '20px',
-              width: '100%',
-              maxWidth: '680px',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              boxShadow: '0 24px 64px rgba(0, 0, 0, 0.6)',
-              padding: '24px',
-            }}
-          >
+        <div className="payback-modal-backdrop">
+          <div className="payback-modal-sheet">
             {/* Modal Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
               <div>
                 <h2 style={{ fontSize: '18px', fontWeight: '900', color: '#F8FAFC', margin: 0 }}>
                   Forensic Evidence Dossier
@@ -797,11 +605,14 @@ export default function PayBackPage() {
                   background: 'rgba(255, 255, 255, 0.08)',
                   border: 'none',
                   color: '#94A3B8',
-                  width: '32px',
-                  height: '32px',
+                  width: '34px',
+                  height: '34px',
                   borderRadius: '50%',
                   cursor: 'pointer',
                   fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 ✕
@@ -809,21 +620,22 @@ export default function PayBackPage() {
             </div>
 
             {/* Dossier Tabs */}
-            <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', paddingBottom: '10px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', gap: '6px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', paddingBottom: '10px', marginBottom: '16px', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
               <button
                 onClick={() => setDossierTab('brief')}
                 style={{
                   background: dossierTab === 'brief' ? '#0070BA' : 'transparent',
                   color: dossierTab === 'brief' ? '#fff' : '#94A3B8',
                   border: 'none',
-                  padding: '6px 14px',
+                  padding: '7px 12px',
                   borderRadius: '8px',
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                Adjudication Brief
+                Legal Brief
               </button>
               <button
                 onClick={() => setDossierTab('forensics')}
@@ -831,14 +643,15 @@ export default function PayBackPage() {
                   background: dossierTab === 'forensics' ? '#0070BA' : 'transparent',
                   color: dossierTab === 'forensics' ? '#fff' : '#94A3B8',
                   border: 'none',
-                  padding: '6px 14px',
+                  padding: '7px 12px',
                   borderRadius: '8px',
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                Network & Session Forensics
+                Session Forensics
               </button>
               <button
                 onClick={() => setDossierTab('timeline')}
@@ -846,22 +659,23 @@ export default function PayBackPage() {
                   background: dossierTab === 'timeline' ? '#0070BA' : 'transparent',
                   color: dossierTab === 'timeline' ? '#fff' : '#94A3B8',
                   border: 'none',
-                  padding: '6px 14px',
+                  padding: '7px 12px',
                   borderRadius: '8px',
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                Post-Purchase Timeline
+                Timeline
               </button>
             </div>
 
             {dossierTab === 'brief' && (
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#10B981' }}>
-                    Confidence Score: {activeDossier.confidence_score || 100}% • Irrefutable Fulfillment
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
+                  <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#10B981' }}>
+                    Score: {activeDossier.confidence_score || 100}% • Irrefutable Fulfillment
                   </div>
                   <button
                     onClick={copyBriefToClipboard}
@@ -869,7 +683,7 @@ export default function PayBackPage() {
                       background: 'rgba(56, 189, 248, 0.15)',
                       color: '#38BDF8',
                       border: 'none',
-                      padding: '4px 10px',
+                      padding: '5px 12px',
                       borderRadius: '6px',
                       fontSize: '11px',
                       fontWeight: '700',
@@ -885,14 +699,16 @@ export default function PayBackPage() {
                     background: '#0B0F19',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
                     borderRadius: '12px',
-                    padding: '16px',
-                    fontSize: '11px',
+                    padding: '14px',
+                    fontSize: '10.5px',
                     lineHeight: '1.6',
                     color: '#E2E8F0',
                     whiteSpace: 'pre-wrap',
-                    maxHeight: '360px',
+                    maxHeight: '300px',
                     overflowY: 'auto',
+                    WebkitOverflowScrolling: 'touch',
                     fontFamily: "'Space Mono', monospace",
+                    wordBreak: 'break-word',
                   }}
                 >
                   {activeDossier.defense_summary || activeDossier.ai_defense_summary}
@@ -901,26 +717,26 @@ export default function PayBackPage() {
             )}
 
             {dossierTab === 'forensics' && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-                <div style={{ background: '#1E293B', padding: '14px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>Originating Client IP</div>
-                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#F8FAFC', marginTop: '2px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
+                <div style={{ background: '#1E293B', padding: '12px', borderRadius: '12px' }}>
+                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Originating Client IP</div>
+                  <div style={{ fontSize: '13px', fontWeight: '800', color: '#F8FAFC', marginTop: '2px', wordBreak: 'break-all' }}>
                     {activeDossier.evidence_packet?.session_forensics?.originating_ip || '102.89.33.14'}
                   </div>
                   <div style={{ fontSize: '10px', color: '#10B981', marginTop: '2px' }}>Consistent Geo-Location</div>
                 </div>
 
-                <div style={{ background: '#1E293B', padding: '14px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>Fulfillment Token</div>
-                  <div style={{ fontSize: '14px', fontWeight: '800', color: '#F8FAFC', marginTop: '2px' }}>
-                    {activeDossier.evidence_packet?.fulfillment?.digital_goods_token || '4920-1928-3847-1920-3849'}
+                <div style={{ background: '#1E293B', padding: '12px', borderRadius: '12px' }}>
+                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Fulfillment Token</div>
+                  <div style={{ fontSize: '13px', fontWeight: '800', color: '#F8FAFC', marginTop: '2px', wordBreak: 'break-all' }}>
+                    {activeDossier.evidence_packet?.fulfillment?.digital_goods_token || '4920-1928-3847'}
                   </div>
                   <div style={{ fontSize: '10px', color: '#10B981', marginTop: '2px' }}>Cryptographic Proof</div>
                 </div>
 
-                <div style={{ background: '#1E293B', padding: '14px', borderRadius: '12px', gridColumn: 'span 2' }}>
-                  <div style={{ fontSize: '11px', color: '#94A3B8' }}>Device User-Agent Fingerprint</div>
-                  <div style={{ fontSize: '12px', fontWeight: '600', color: '#F8FAFC', marginTop: '2px' }}>
+                <div style={{ background: '#1E293B', padding: '12px', borderRadius: '12px', gridColumn: '1 / -1' }}>
+                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Device User-Agent Fingerprint</div>
+                  <div style={{ fontSize: '11.5px', fontWeight: '600', color: '#F8FAFC', marginTop: '2px', wordBreak: 'break-all' }}>
                     {activeDossier.evidence_packet?.session_forensics?.user_agent || 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4)'}
                   </div>
                 </div>
@@ -928,21 +744,21 @@ export default function PayBackPage() {
             )}
 
             {dossierTab === 'timeline' && (
-              <div style={{ padding: '8px 0' }}>
+              <div style={{ padding: '6px 0' }}>
                 {[
                   { time: 'T-3m 00s', label: 'User Login & 2FA Session Authenticated', ip: '102.89.33.14' },
                   { time: 'T-0m 00s', label: 'Transaction Initiated & Double-Entry Ledger Debited', ip: '102.89.33.14' },
                   { time: 'T+0m 01s', label: 'Digital Token Dispatched via Biller Gateway (Code 90000)', ip: 'AutoPay/Worker' },
                   { time: 'T+0m 45s', label: 'Post-Purchase Activity: Receipt Viewed & Account Active', ip: '102.89.33.14' },
                 ].map((step, idx) => (
-                  <div key={idx} style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
+                  <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981' }} />
-                      {idx < 3 && <div style={{ width: '2px', height: '36px', background: 'rgba(255, 255, 255, 0.1)', marginTop: '4px' }} />}
+                      <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#10B981', flexShrink: 0 }} />
+                      {idx < 3 && <div style={{ width: '2px', height: '32px', background: 'rgba(255, 255, 255, 0.1)', marginTop: '4px' }} />}
                     </div>
                     <div>
-                      <div style={{ fontSize: '11px', color: '#38BDF8', fontWeight: '700' }}>{step.time} • IP: {step.ip}</div>
-                      <div style={{ fontSize: '13px', fontWeight: '600', color: '#F8FAFC' }}>{step.label}</div>
+                      <div style={{ fontSize: '10.5px', color: '#38BDF8', fontWeight: '700' }}>{step.time} • IP: {step.ip}</div>
+                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#F8FAFC', lineHeight: '1.4' }}>{step.label}</div>
                     </div>
                   </div>
                 ))}
@@ -960,7 +776,9 @@ export default function PayBackPage() {
                 borderRadius: '10px',
                 marginTop: '16px',
                 fontWeight: '700',
+                fontSize: '13px',
                 cursor: 'pointer',
+                minHeight: '46px',
               }}
             >
               Close Dossier
@@ -971,30 +789,8 @@ export default function PayBackPage() {
 
       {/* Simulation Modal */}
       {showSimModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.85)',
-            backdropFilter: 'blur(8px)',
-            zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '16px',
-          }}
-        >
-          <div
-            style={{
-              background: '#0F172A',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              borderRadius: '20px',
-              width: '100%',
-              maxWidth: '440px',
-              padding: '24px',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.6)',
-            }}
-          >
+        <div className="payback-modal-backdrop">
+          <div className="payback-modal-sheet" style={{ maxWidth: '440px' }}>
             <h3 style={{ fontSize: '18px', fontWeight: '900', color: '#F8FAFC', marginTop: 0 }}>
               Simulate PayPal Chargeback
             </h3>
@@ -1057,22 +853,15 @@ export default function PayBackPage() {
                   borderRadius: '10px',
                   fontWeight: '700',
                   cursor: 'pointer',
+                  minHeight: '46px',
                 }}
               >
                 Cancel
               </button>
               <button
                 onClick={handleSimulateDispute}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: 'linear-gradient(135deg, #0070BA 0%, #0284C7 100%)',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: '10px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                }}
+                className="payback-btn-primary"
+                style={{ flex: 1 }}
               >
                 Launch Defense
               </button>
