@@ -62,14 +62,15 @@ export default function SignupPage() {
   ];
 
   return (
-    <div className="page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100dvh', padding: 'var(--space-xl) 0' }}>
-      <div className="container page-enter">
-        <div className="text-center" style={{ marginBottom: 'var(--space-xl)' }}>
-          <h1 style={{ marginBottom: 4 }}>Create Account</h1>
-          <p className="text-muted" style={{ fontSize: '0.9rem' }}>Join PayBack AI Merchant Network</p>
+    <div className="page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100dvh', background: 'var(--bg-primary)', padding: '40px 16px' }}>
+      <div className="container page-enter" style={{ maxWidth: 480 }}>
+        <div className="text-center" style={{ marginBottom: '24px' }}>
+          <h1 style={{ marginBottom: 4, color: 'var(--text-primary)', fontSize: '1.75rem' }}>Create Merchant Account</h1>
+          <p className="text-muted" style={{ fontSize: '0.85rem' }}>Join the PayBack AI PayPal Merchant Network</p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+        <div className="card" style={{ padding: '28px 24px', boxShadow: 'var(--shadow-lg)' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
           {errors.form && (
             <div style={{
               padding: 'var(--space-md)', background: 'rgba(239, 68, 68, 0.1)',
@@ -122,9 +123,10 @@ export default function SignupPage() {
             ) : 'Create Account'}
           </button>
         </form>
+        </div>
 
-        <p className="text-center text-muted" style={{ marginTop: 'var(--space-xl)', fontSize: '0.85rem' }}>
-          Already have an account? <Link href="/login" style={{ fontWeight: 600 }}>Sign In</Link>
+        <p className="text-center text-muted" style={{ marginTop: 'var(--space-lg)', fontSize: '0.85rem' }}>
+          Already have an account? <Link href="/login" style={{ fontWeight: 600, color: 'var(--primary)' }}>Sign In</Link>
         </p>
       </div>
     </div>

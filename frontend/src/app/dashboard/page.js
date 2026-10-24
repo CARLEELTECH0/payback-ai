@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import PayPalHeader from '@/components/PayPalHeader';
 import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
@@ -76,19 +77,31 @@ export default function DashboardPage() {
   const balance = walletData?.balance ? Number(walletData.balance) : 19450.00;
 
   return (
-    <div className="page">
-      <div className="container page-enter">
-        {/* Header */}
-        <div className="flex items-center justify-between" style={{ padding: 'var(--space-md) 0 var(--space-sm)' }}>
+    <div style={{ background: 'var(--bg-primary)', minHeight: '100dvh', transition: 'background 0.2s ease' }}>
+      <PayPalHeader />
+      <div className="container page-enter" style={{ maxWidth: '1000px', padding: '24px 16px 100px 16px' }}>
+        {/* Header Greeting */}
+        <div className="flex items-center justify-between" style={{ padding: '0 0 var(--space-md)' }}>
           <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11px', fontWeight: 700, color: '#38BDF8', background: 'rgba(0, 112, 186, 0.15)', padding: '2px 8px', borderRadius: '12px', marginBottom: '4px' }}>
-              <span>🅿️</span> PAYPAL MERCHANT SERVICES
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '11px',
+              fontWeight: 700,
+              color: 'var(--primary)',
+              background: 'rgba(0, 112, 186, 0.1)',
+              padding: '3px 10px',
+              borderRadius: '12px',
+              marginBottom: '6px',
+            }}>
+              <span>🅿️</span> PAYPAL MERCHANT HUB
             </div>
-            <h3 style={{ fontWeight: 800, color: '#F8FAFC' }}>
+            <h2 style={{ fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
               {user?.first_name || 'Jordan'} Lee 👋
-            </h3>
+            </h2>
           </div>
-          <Link href="/settings" className="btn-icon btn-ghost" style={{ fontSize: '1.4rem' }}>
+          <Link href="/settings" className="btn-icon btn-ghost" style={{ fontSize: '1.4rem', border: '1px solid var(--border)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             👤
           </Link>
         </div>
@@ -97,40 +110,41 @@ export default function DashboardPage() {
         <div className="section" style={{ marginBottom: 'var(--space-md)' }}>
           <Link href="/payback" style={{ textDecoration: 'none' }}>
             <div style={{
-              background: 'linear-gradient(135deg, rgba(0, 112, 186, 0.3) 0%, rgba(0, 48, 135, 0.4) 100%)',
-              border: '1px solid rgba(56, 189, 248, 0.35)',
+              background: 'linear-gradient(135deg, #0070BA 0%, #003087 100%)',
               borderRadius: 'var(--radius-xl)',
-              padding: '18px',
+              padding: '20px 24px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               boxShadow: '0 8px 24px rgba(0, 112, 186, 0.25)',
+              color: '#FFFFFF',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                 <div style={{
-                  width: '44px',
-                  height: '44px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #0070BA 0%, #10B981 100%)',
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '14px',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(10px)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: '22px',
-                  boxShadow: '0 4px 16px rgba(0, 112, 186, 0.4)',
+                  fontSize: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
                 }}>
                   🛡️
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '15px', fontWeight: '800', color: '#F8FAFC' }}>PayBack AI Copilot</span>
-                    <span style={{ fontSize: '10px', fontWeight: '700', background: '#10B981', color: '#fff', padding: '1px 6px', borderRadius: '8px' }}>LIVE</span>
+                    <span style={{ fontSize: '16px', fontWeight: '800', color: '#FFFFFF' }}>PayBack AI Copilot</span>
+                    <span style={{ fontSize: '10px', fontWeight: '800', background: '#00A859', color: '#FFFFFF', padding: '2px 8px', borderRadius: '10px' }}>LIVE RADAR</span>
                   </div>
-                  <p style={{ margin: '2px 0 0', fontSize: '12px', color: '#94A3B8' }}>
-                    Autonomous 60s PayPal dispute defense • 96% win rate
+                  <p style={{ margin: '3px 0 0', fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.85)' }}>
+                    Autonomous 60s PayPal dispute defense • 96% win rate • Pay in 4 churn bailout
                   </p>
                 </div>
               </div>
-              <span style={{ color: '#38BDF8', fontSize: '1.2rem', fontWeight: 800 }}>→</span>
+              <span style={{ color: '#FFC439', fontSize: '1.4rem', fontWeight: 900 }}>→</span>
             </div>
           </Link>
         </div>
@@ -177,33 +191,33 @@ export default function DashboardPage() {
 
         {/* PayPal AI Platform Solutions */}
         <div className="section" style={{ marginBottom: 'var(--space-xl)' }}>
-          <p className="section-title" style={{ fontSize: '13px', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          <p className="section-title" style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             PayPal AI Platform Solutions
           </p>
           <div style={{
             display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)',
           }}>
-            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)', background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)' }}>
               <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🛡️</div>
-              <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#F8FAFC' }}>Dispute Shield</p>
+              <p style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Dispute Shield</p>
               <p className="text-muted" style={{ fontSize: '0.75rem' }}>PayPal Disputes API v1 Auto-Defense</p>
             </Link>
 
-            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)', background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)' }}>
                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🔄</div>
-               <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#F8FAFC' }}>Pay in 4 Bailout</p>
+               <p style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Pay in 4 Bailout</p>
                <p className="text-muted" style={{ fontSize: '0.75rem' }}>Failed Recurring Churn Rescue</p>
             </Link>
 
-            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)', background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)' }}>
                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>⚡</div>
-               <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#F8FAFC' }}>Live Telemetry</p>
+               <p style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Live Telemetry</p>
                <p className="text-muted" style={{ fontSize: '0.75rem' }}>1.4s Webhook Evidence Assembler</p>
             </Link>
 
-            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)', background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <Link href="/payback" className="card" style={{ padding: 'var(--space-md)' }}>
                <div style={{ fontSize: '2rem', marginBottom: '8px' }}>⚖️</div>
-               <p style={{ fontWeight: 700, fontSize: '0.95rem', color: '#F8FAFC' }}>Forensic Dossier</p>
+               <p style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Forensic Dossier</p>
                <p className="text-muted" style={{ fontSize: '0.75rem' }}>5-Point Formal Legal Briefs</p>
             </Link>
           </div>

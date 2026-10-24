@@ -1,5 +1,6 @@
 'use client';
 
+import PayPalHeader from '@/components/PayPalHeader';
 import BottomNav from '@/components/BottomNav';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -24,10 +25,11 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="page">
-      <div className="container page-enter">
-        <div className="page-header">
-          <h2>Settings</h2>
+    <div style={{ background: 'var(--bg-primary)', minHeight: '100dvh', transition: 'background 0.2s ease' }}>
+      <PayPalHeader />
+      <div className="container page-enter" style={{ maxWidth: '800px', padding: '24px 16px 100px 16px' }}>
+        <div className="page-header" style={{ padding: '0 0 var(--space-md)' }}>
+          <h2 style={{ color: 'var(--text-primary)', margin: 0 }}>Merchant Settings</h2>
         </div>
 
         {/* User Card */}

@@ -2,11 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTheme } from '@/context/ThemeContext';
 
-export default function PayPalHeader({ theme = 'light', onToggleTheme }) {
+export default function PayPalHeader({ theme: propTheme, onToggleTheme: propOnToggleTheme }) {
   const pathname = usePathname();
+  const themeCtx = useTheme();
 
-  const isDark = theme === 'dark';
+  const currentTheme = propTheme || themeCtx.theme || 'light';
+  const handleToggle = propOnToggleTheme || themeCtx.toggleTheme;
+  const isDark = currentTheme === 'dark';
   const navBg = isDark ? '#0A0F1D' : '#001C64';
   const borderColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.12)';
 
@@ -126,27 +130,25 @@ export default function PayPalHeader({ theme = 'light', onToggleTheme }) {
           </div>
 
           {/* Theme Switcher Button */}
-          {onToggleTheme && (
-            <button
-              onClick={onToggleTheme}
-              title={`Switch to ${isDark ? 'Enterprise Light' : 'Developer Dark'} mode`}
-              style={{
-                background: 'rgba(255, 255, 255, 0.12)',
-                border: 'none',
-                color: '#FFFFFF',
-                borderRadius: '50%',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                fontSize: '14px',
-              }}
-            >
-              {isDark ? '☀️' : '🌙'}
-            </button>
-          )}
+          <button
+            onClick={handleToggle}
+            title={`Switch to ${isDark ? 'Enterprise Light' : 'Developer Dark'} mode`}
+            style={{
+              background: 'rgba(255, 255, 255, 0.12)',
+              border: 'none',
+              color: '#FFFFFF',
+              borderRadius: '50%',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+          >
+            {isDark ? '☀️' : '🌙'}
+          </button>
 
           {/* User Avatar */}
           <Link href="/settings" style={{

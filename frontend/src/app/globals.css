@@ -12,41 +12,42 @@
   --primary-light: #0079C1;   /* PayPal Light Blue */
   --primary-dark: #003087;    /* PayPal Deep Marine Navy */
   --primary-navy: #001C64;    /* PayPal Darkest Midnight */
-  --primary-glow: rgba(0, 112, 186, 0.2);
+  --primary-glow: rgba(0, 112, 186, 0.15);
 
   --accent: #FFC439;          /* Iconic PayPal Button Gold */
   --accent-light: #FFE07D;
   --accent-dark: #F29E02;
 
-  /* Premium Cyber & Dark Fintech Theme (PayPal Developer / Enterprise) */
-  --bg-primary: #080C15;      /* PayPal Deep Slate Midnight */
-  --bg-secondary: #0F172A;    
-  --bg-card: rgba(15, 23, 42, 0.75); /* High-grade frosted glass */
-  --bg-card-hover: rgba(30, 41, 59, 0.85);
-  --bg-elevated: #1E293B;
+  /* Official PayPal Enterprise Light Theme (Default) */
+  --bg-primary: #F5F7FA;      /* PayPal Light Slate / Canvas */
+  --bg-secondary: #FFFFFF;    /* Clean White */
+  --bg-card: #FFFFFF;         /* Crisp White Card */
+  --bg-card-hover: #F8FAFC;
+  --bg-elevated: #FFFFFF;
+  --bg-glass: rgba(255, 255, 255, 0.9);
 
-  /* Text: Clean, High Contrast */
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
+  /* Text: Clean, High Contrast Navy & Slate */
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
   --text-muted: #64748B;
-  --text-accent: #38BDF8;
+  --text-accent: #0070BA;
 
   /* Status */
   --success: #00A859;        /* PayPal Security Green */
-  --warning: #F59E0B;
-  --error: #EF4444;
+  --warning: #D97706;
+  --error: #DC2626;
   --info: #0070BA;
 
-  /* Borders / Frosted Edges */
-  --border: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.16);
+  /* Borders / Dividers */
+  --border: #E2E8F0;
+  --border-light: #F1F5F9;
   --border-focus: #0070BA;
 
-  /* Soft, Professional PayPal Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  --shadow-glow: 0 0 24px rgba(0, 112, 186, 0.25);
+  /* Soft, Professional PayPal Light Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 24px rgba(0, 112, 186, 0.18);
 
   /* Radius */
   --radius-sm: 8px;
@@ -66,6 +67,30 @@
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
+}
+
+/* PayPal Developer Dark Theme (Activated via toggle) */
+[data-theme="dark"] {
+  --bg-primary: #080C15;      /* PayPal Deep Slate Midnight */
+  --bg-secondary: #0F172A;    
+  --bg-card: #0F172A;         /* Frosted Slate */
+  --bg-card-hover: #1E293B;
+  --bg-elevated: #1E293B;
+  --bg-glass: rgba(15, 23, 42, 0.85);
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text-accent: #38BDF8;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.16);
+  --border-focus: #38BDF8;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 24px rgba(0, 112, 186, 0.25);
 }
 
 /* ---- Reset & Base ---- */
@@ -169,25 +194,20 @@ h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
 .gap-md { gap: var(--space-md); }
 .gap-lg { gap: var(--space-lg); }
 
-/* ---- Professional Liquid Glass Cards ---- */
+/* ---- Professional Enterprise Cards ---- */
 .card {
   background: var(--bg-card);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  /* Crisper, lighter borders for clean separation */
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  border-top: 1px solid rgba(255, 255, 255, 0.9);
-  border-left: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   transition: all var(--transition-normal);
-  box-shadow: var(--shadow-md), inset 0 2px 4px rgba(255,255,255,0.7);
+  box-shadow: var(--shadow-md);
 }
 
 .card:hover {
   background: var(--bg-card-hover);
-  border-color: rgba(255, 255, 255, 0.9);
-  box-shadow: var(--shadow-lg), inset 0 2px 4px rgba(255,255,255,0.9);
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
 }
 
@@ -195,7 +215,7 @@ h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
   background: var(--bg-glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
 }
@@ -246,11 +266,11 @@ h3 { font-size: clamp(1.25rem, 3vw, 1.5rem); }
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
-  box-shadow: 0 4px 15px rgba(0, 166, 81, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 112, 186, 0.25);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 25px rgba(0, 166, 81, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 112, 186, 0.4);
   transform: translateY(-1px);
 }
 
@@ -457,17 +477,15 @@ select.input {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(15, 23, 42, 0.94);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
   display: flex;
   justify-content: space-around;
   align-items: center;
   padding: 6px 2px;
   padding-bottom: max(6px, env(safe-area-inset-bottom));
   z-index: 1000;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
 }
 
 .bottom-nav-item {
@@ -503,7 +521,7 @@ select.input {
 }
 
 .bottom-nav-item.active {
-  color: #10B981;
+  color: var(--primary);
   font-weight: 700;
 }
 
@@ -515,13 +533,13 @@ select.input {
   transform: translateX(-50%);
   width: 18px;
   height: 3px;
-  background: #10B981;
+  background: var(--primary);
   border-radius: 0 0 4px 4px;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  box-shadow: 0 0 8px rgba(0, 112, 186, 0.5);
 }
 
 .bottom-nav-item:hover {
-  color: #38BDF8;
+  color: var(--primary);
 }
 
 /* ---- Wallet Card (PayPal Merchant Account) ---- */

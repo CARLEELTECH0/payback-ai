@@ -52,27 +52,28 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100dvh' }}>
-      <div className="container page-enter">
+    <div className="page" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100dvh', background: 'var(--bg-primary)', padding: '40px 16px' }}>
+      <div className="container page-enter" style={{ maxWidth: 440 }}>
         {/* Logo & Branding */}
-        <div className="text-center" style={{ marginBottom: '40px' }}>
+        <div className="text-center" style={{ marginBottom: '24px' }}>
           <div style={{
-            width: 72, height: 72, margin: '0 auto 16px',
+            width: 64, height: 64, margin: '0 auto 14px',
             background: 'linear-gradient(135deg, #0070BA 0%, #003087 100%)',
-            borderRadius: '20px',
+            borderRadius: '18px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '2rem',
-            boxShadow: '0 8px 32px rgba(0, 112, 186, 0.4)',
+            fontSize: '1.8rem',
+            boxShadow: '0 8px 24px rgba(0, 112, 186, 0.35)',
           }}>
             🛡️
           </div>
-          <h1 style={{ marginBottom: 4 }}>PayBack AI</h1>
-          <p className="text-muted" style={{ fontSize: '0.9rem' }}>
+          <h1 style={{ marginBottom: 4, color: 'var(--text-primary)', fontSize: '1.75rem' }}>PayBack AI</h1>
+          <p className="text-muted" style={{ fontSize: '0.85rem' }}>
             PayPal Merchant Copilot & Autonomous Defense
           </p>
         </div>
 
-        {/* One-Click Demo Access Box */}
+        <div className="card" style={{ padding: '28px 24px', boxShadow: 'var(--shadow-lg)' }}>
+          {/* One-Click Demo Access Box */}
         <div style={{
           background: 'rgba(0, 112, 186, 0.08)',
           border: '1px solid rgba(0, 112, 186, 0.25)',
@@ -204,10 +205,11 @@ export default function LoginPage() {
           <span>Demo Email: <strong style={{ color: 'var(--text-primary)' }}>merchant@payback.ai</strong></span>
           <span>Password: <strong style={{ color: 'var(--text-primary)' }}>Password123!</strong></span>
         </div>
+        </div>
 
-        <p className="text-center text-muted" style={{ marginTop: 'var(--space-xl)', fontSize: '0.85rem' }}>
+        <p className="text-center text-muted" style={{ marginTop: 'var(--space-lg)', fontSize: '0.85rem' }}>
           Don&apos;t have an account?{' '}
-          <Link href="/signup" style={{ fontWeight: 600 }}>Create Account</Link>
+          <Link href="/signup" style={{ fontWeight: 600, color: 'var(--primary)' }}>Create Account</Link>
         </p>
       </div>
     </div>

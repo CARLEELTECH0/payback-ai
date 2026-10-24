@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import PayPalHeader from '@/components/PayPalHeader';
 import BottomNav from '@/components/BottomNav';
+import { useTheme } from '@/context/ThemeContext';
 import api from '@/lib/api';
 
 export default function PayBackPage() {
-  const [uiTheme, setUiTheme] = useState('light'); // 'light' (PayPal Resolution Center) | 'dark' (PayPal Developer)
+  const { theme: uiTheme, toggleTheme: toggleUiTheme, isDark } = useTheme();
   const [activeTab, setActiveTab] = useState('disputes'); // 'disputes' | 'churn'
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -180,8 +181,6 @@ export default function PayBackPage() {
     return matchesFilter && matchesSearch;
   });
 
-  const isDark = uiTheme === 'dark';
-
   // Theme dynamic colors
   const pageBg = isDark ? '#080C15' : '#F5F7FA';
   const cardBg = isDark ? '#0F172A' : '#FFFFFF';
@@ -197,7 +196,7 @@ export default function PayBackPage() {
       {/* PayPal Business Top Navigation Bar */}
       <PayPalHeader
         theme={uiTheme}
-        onToggleTheme={() => setUiTheme(prev => prev === 'light' ? 'dark' : 'light')}
+        onToggleTheme={toggleUiTheme}
       />
 
       {/* Main Container */}
