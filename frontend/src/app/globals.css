@@ -1279,3 +1279,192 @@ select.input {
     padding: 24px;
   }
 }
+
+/* ============================================
+   PayPal Resolution Center — Enterprise Design System
+   ============================================ */
+
+/* Utility Visibility */
+@media (max-width: 880px) {
+  .paypal-header-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+/* Iconic PayPal Pill Buttons */
+.btn-paypal-pill {
+  background: #0070BA;
+  color: #FFFFFF !important;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 22px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 112, 186, 0.35);
+  transition: all 0.18s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+}
+
+.btn-paypal-pill:hover {
+  background: #003087;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 112, 186, 0.45);
+}
+
+.btn-paypal-pill:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-paypal-gold-pill {
+  background: #FFC439;
+  color: #001C64 !important;
+  border: none;
+  border-radius: 9999px;
+  padding: 11px 24px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(255, 196, 57, 0.35);
+  transition: all 0.18s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+}
+
+.btn-paypal-gold-pill:hover {
+  background: #F29E02;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(255, 196, 57, 0.45);
+}
+
+.btn-paypal-gold-pill:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-paypal-outline-pill {
+  background: transparent;
+  color: #0070BA !important;
+  border: 1.5px solid #0070BA;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.18s ease;
+  user-select: none;
+  text-decoration: none;
+}
+
+.btn-paypal-outline-pill:hover {
+  background: rgba(0, 112, 186, 0.08);
+}
+
+/* Authentic PayPal Status Badges */
+.paypal-badge-action {
+  background: #FFF7ED;
+  color: #C2410C;
+  border: 1px solid #FED7AA;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.paypal-badge-review {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.paypal-badge-won {
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+/* PayPal Enterprise Slide-out Drawer */
+.paypal-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 15, 45, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1100;
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 0.2s ease;
+}
+
+.paypal-drawer-panel {
+  width: 100%;
+  max-width: 620px;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.4);
+  animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Official PayPal Pay Later Merchant Messaging Widget */
+.paypal-paylater-widget {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}

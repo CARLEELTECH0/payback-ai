@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import PayPalHeader from '@/components/PayPalHeader';
 import BottomNav from '@/components/BottomNav';
 import api from '@/lib/api';
 
 export default function PayBackPage() {
+  const [uiTheme, setUiTheme] = useState('light'); // 'light' (PayPal Resolution Center) | 'dark' (PayPal Developer)
   const [activeTab, setActiveTab] = useState('disputes'); // 'disputes' | 'churn'
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,21 +53,27 @@ export default function PayBackPage() {
         {
           id: 'seed-1',
           paypal_dispute_id: 'PP-D-882194',
+          buyer_name: 'Alex Rivera',
+          buyer_email: 'alex.rivera@example.com',
           dispute_amount: '75.00',
           dispute_currency: 'USD',
           reason: 'MERCHANDISE_OR_SERVICE_NOT_RECEIVED',
           status: 'EVIDENCE_SUBMITTED',
-          confidence_score: '95.00',
+          confidence_score: '96.50',
+          deadline: 'In 9 days',
           created_at: new Date(Date.now() - 3600000).toISOString(),
         },
         {
           id: 'seed-2',
           paypal_dispute_id: 'PP-D-771923',
+          buyer_name: 'Samantha Vance',
+          buyer_email: 'samantha.v@example.com',
           dispute_amount: '120.00',
           dispute_currency: 'USD',
           reason: 'UNAUTHORIZED_TRANSACTION',
           status: 'RESOLVED_MERCHANT_WIN',
-          confidence_score: '98.00',
+          confidence_score: '98.80',
+          deadline: 'Resolved',
           created_at: new Date(Date.now() - 86400000).toISOString(),
         },
       ]);
@@ -78,7 +87,7 @@ export default function PayBackPage() {
     setSimProgress(15);
     setShowSimModal(false);
     setSimulationLog([
-      '⚡ [0.1s] Webhook received from PayPal: CUSTOMER.DISPUTE.CREATED...',
+      '⚡ [0.1s] Webhook received from PayPal: CUSTOMER.DISPUTE.CREATED (Sandbox)',
     ]);
 
     setTimeout(() => {
@@ -93,7 +102,7 @@ export default function PayBackPage() {
       setSimProgress(75);
       setSimulationLog((prev) => [
         ...prev,
-        '🛡️ [0.8s] Forensic Audit Extracted: Client IP 102.89.33.14 • Verified iPhone iOS 17.4 • Delivery Token 4920...',
+        '🛡️ [0.8s] Forensic Audit Extracted: Client IP 102.89.33.14 • Verified iPhone iOS 17.4 • Token 4920...',
       ]);
     }, 800);
 
@@ -101,7 +110,7 @@ export default function PayBackPage() {
       setSimProgress(90);
       setSimulationLog((prev) => [
         ...prev,
-        '⚖️ [1.1s] PayBack AI synthesizing 5-point formal dispute defense brief adhering to PayPal criteria...',
+        '⚖️ [1.1s] PayBack AI synthesizing 5-point formal adjudication brief adhering to PayPal claim criteria...',
       ]);
     }, 1100);
 
@@ -144,8 +153,8 @@ export default function PayBackPage() {
         retained_subscriber: true,
         rescued_amount: 54.00,
         installment_breakdown: '4 bi-weekly payments of $13.50 (Zero Interest)',
-        invoice_id: 'INV2-MOCK-RECOVERY-4412',
-        paypal_checkout_url: 'https://www.sandbox.paypal.com/invoice/p/#INV2-MOCK-RECOVERY-4412',
+        invoice_id: 'INV2-PP-RECOVERY-8812',
+        paypal_checkout_url: 'https://www.sandbox.paypal.com/invoice/p/#INV2-PP-RECOVERY-8812',
       });
     } finally {
       setRescuing(false);
@@ -166,761 +175,911 @@ export default function PayBackPage() {
     const matchesSearch =
       !searchQuery ||
       d.paypal_dispute_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      d.reason?.toLowerCase().includes(searchQuery.toLowerCase());
+      d.reason?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.buyer_name?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
+  const isDark = uiTheme === 'dark';
+
+  // Theme dynamic colors
+  const pageBg = isDark ? '#080C15' : '#F5F7FA';
+  const cardBg = isDark ? '#0F172A' : '#FFFFFF';
+  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0';
+  const textTitle = isDark ? '#FFFFFF' : '#001C64';
+  const textBody = isDark ? '#E2E8F0' : '#1E293B';
+  const textMuted = isDark ? '#94A3B8' : '#64748B';
+  const tableHeaderBg = isDark ? '#1E293B' : '#F8FAFC';
+  const tableRowHover = isDark ? 'rgba(30, 41, 59, 0.7)' : '#F1F5F9';
+
   return (
-    <div className="payback-container">
-      {/* PayPal Official Brand Bar */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '4px 0 14px 0',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        marginBottom: '16px',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '28px',
-            height: '28px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <svg viewBox="0 0 240 240" width="28" height="28" fill="none">
-              <path d="M58 35 h58 c24 0 42 13 42 37 c0 25 -20 41 -46 41 h-22 l-12 72 h-20 z" fill="#002F86" />
-              <path d="M82 62 h56 c22 0 39 12 39 35 c0 24 -19 39 -43 39 h-21 l-11 67 h-20 z" fill="#0079C1" opacity="0.95" />
-            </svg>
-          </div>
+    <div style={{ background: pageBg, minHeight: '100dvh', transition: 'background 0.2s ease' }}>
+      {/* PayPal Business Top Navigation Bar */}
+      <PayPalHeader
+        theme={uiTheme}
+        onToggleTheme={() => setUiTheme(prev => prev === 'light' ? 'dark' : 'light')}
+      />
+
+      {/* Main Container */}
+      <main style={{ maxWidth: '1180px', margin: '0 auto', padding: '20px 16px 100px 16px', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}>
+        {/* Breadcrumb Navigation */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: textMuted, marginBottom: '12px' }}>
+          <Link href="/dashboard" style={{ color: '#0070BA', textDecoration: 'none', fontWeight: 600 }}>Business Hub</Link>
+          <span>/</span>
+          <span>Resolution Center</span>
+          <span>/</span>
+          <span style={{ fontWeight: 700, color: textTitle }}>PayBack AI Defense Copilot</span>
+        </div>
+
+        {/* Page Title & View Switcher */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          gap: '14px',
+          marginBottom: '20px',
+        }}>
           <div>
-            <span style={{ fontSize: '15px', fontWeight: '900', color: '#F8FAFC', letterSpacing: '-0.3px' }}>
-              PayPal <span style={{ color: '#0079C1' }}>Developer</span>
-            </span>
-            <span style={{ fontSize: '10.5px', color: '#64748B', marginLeft: '6px', fontWeight: 600 }}>
-              | AI Hackathon 2026
-            </span>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '5px',
-            background: 'rgba(0, 112, 186, 0.15)',
-            border: '1px solid rgba(0, 112, 186, 0.3)',
-            padding: '3px 10px',
-            borderRadius: '20px',
-            fontSize: '11px',
-            fontWeight: 700,
-            color: '#38BDF8',
-          }}>
-            <span>🔒</span> Verified Partner
-          </div>
-        </div>
-      </div>
-
-      {/* Top Banner Status Bar */}
-      <div className="payback-top-bar">
-        <div className="payback-top-status">
-          <span
-            style={{
-              width: '9px',
-              height: '9px',
-              borderRadius: '50%',
-              background: '#10B981',
-              boxShadow: '0 0 10px #10B981',
-              display: 'inline-block',
-              flexShrink: 0,
-            }}
-          />
-          <span style={{ fontSize: '11.5px', fontWeight: '600', color: '#E2E8F0', letterSpacing: '0.2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            PayPal API v1/customer/disputes • <strong style={{ color: '#10B981' }}>OAuth 2.0 Connected</strong>
-          </span>
-        </div>
-
-        <div className="payback-badge-tag">
-          SANDBOX LIVE
-        </div>
-      </div>
-
-      {/* Hero Header Section */}
-      <div className="payback-header">
-        <div className="payback-header-icon">
-          🛡️
-        </div>
-        <div>
-          <h1 className="payback-title">
-            PayBack <span style={{ color: '#38BDF8', fontWeight: '800' }}>AI Copilot</span>
-          </h1>
-          <p className="payback-subtitle">
-            Autonomous 60-Second PayPal Chargeback Defense & Pay Later Dunning Engine
-          </p>
-        </div>
-      </div>
-
-      {/* Navigation Switch Tabs */}
-      <div className="payback-tabs">
-        <button
-          onClick={() => setActiveTab('disputes')}
-          className="payback-tab-btn"
-          style={{
-            background: activeTab === 'disputes' ? 'linear-gradient(135deg, #0070BA 0%, #00509E 100%)' : 'transparent',
-            color: activeTab === 'disputes' ? '#FFFFFF' : '#94A3B8',
-            boxShadow: activeTab === 'disputes' ? '0 4px 16px rgba(0, 112, 186, 0.4)' : 'none',
-          }}
-        >
-          <span>🛡️</span> Dispute Shield
-        </button>
-
-        <button
-          onClick={() => setActiveTab('churn')}
-          className="payback-tab-btn"
-          style={{
-            background: activeTab === 'churn' ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'transparent',
-            color: activeTab === 'churn' ? '#FFFFFF' : '#94A3B8',
-            boxShadow: activeTab === 'churn' ? '0 4px 16px rgba(16, 185, 129, 0.35)' : 'none',
-          }}
-        >
-          <span>🔄</span> Pay Later Churn
-        </button>
-      </div>
-
-      {activeTab === 'disputes' ? (
-        <>
-          {/* Real-time KPI Metric Cards */}
-          <div className="payback-kpi-grid">
-            {/* Card 1: Protected Capital */}
-            <div className="payback-kpi-card" style={{ border: '1px solid rgba(16, 185, 129, 0.25)' }}>
-              <div>
-                <div className="payback-kpi-title">
-                  Protected Capital
-                </div>
-                <div className="payback-kpi-value" style={{ color: '#10B981' }}>
-                  ${metrics.totalProtectedUSD}
-                  <span style={{ fontSize: '11px', fontWeight: '600', color: '#64748B', marginLeft: '3px' }}>USD</span>
-                </div>
-              </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '6px', fontSize: '10.5px', fontWeight: '700', color: '#10B981', background: 'rgba(16, 185, 129, 0.15)', padding: '2px 7px', borderRadius: '10px', width: 'fit-content' }}>
-                ↑ 100% Retained
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h1 style={{ fontSize: '26px', fontWeight: 900, color: textTitle, margin: 0, letterSpacing: '-0.5px' }}>
+                Resolution Center
+              </h1>
+              <span style={{
+                fontSize: '11px',
+                fontWeight: 800,
+                background: '#0070BA',
+                color: '#FFFFFF',
+                padding: '3px 10px',
+                borderRadius: '20px',
+                letterSpacing: '0.4px',
+              }}>
+                AI COPILOT PREVIEW
+              </span>
             </div>
+            <p style={{ margin: '4px 0 0', fontSize: '13.5px', color: textMuted }}>
+              Autonomous 60-second dispute defense & predictive PayPal Pay Later churn bailout engine.
+            </p>
+          </div>
 
-            {/* Card 2: Win Rate */}
-            <div className="payback-kpi-card" style={{ border: '1px solid rgba(56, 189, 248, 0.25)' }}>
-              <div>
-                <div className="payback-kpi-title">
-                  AI Win Rate
+          {/* Theme Pill Toggle */}
+          <div style={{ display: 'flex', gap: '8px', background: isDark ? '#1E293B' : '#E2E8F0', padding: '3px', borderRadius: '9999px' }}>
+            <button
+              onClick={() => setUiTheme('light')}
+              style={{
+                background: !isDark ? '#0070BA' : 'transparent',
+                color: !isDark ? '#FFFFFF' : textMuted,
+                border: 'none',
+                borderRadius: '9999px',
+                padding: '6px 14px',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              Enterprise (Light)
+            </button>
+            <button
+              onClick={() => setUiTheme('dark')}
+              style={{
+                background: isDark ? '#0070BA' : 'transparent',
+                color: isDark ? '#FFFFFF' : textMuted,
+                border: 'none',
+                borderRadius: '9999px',
+                padding: '6px 14px',
+                fontSize: '12px',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              Developer (Dark)
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation Tabs (Dispute Shield vs Pay Later Rescue) */}
+        <div style={{
+          display: 'flex',
+          gap: '10px',
+          borderBottom: `2px solid ${cardBorder}`,
+          marginBottom: '24px',
+        }}>
+          <button
+            onClick={() => setActiveTab('disputes')}
+            style={{
+              padding: '12px 18px',
+              border: 'none',
+              background: 'transparent',
+              fontSize: '14px',
+              fontWeight: activeTab === 'disputes' ? '800' : '600',
+              color: activeTab === 'disputes' ? '#0070BA' : textMuted,
+              borderBottom: activeTab === 'disputes' ? '3px solid #0070BA' : '3px solid transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '-2px',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <span>🛡️</span> Dispute Defense Shield
+            <span style={{
+              background: activeTab === 'disputes' ? '#0070BA' : (isDark ? '#1E293B' : '#E2E8F0'),
+              color: activeTab === 'disputes' ? '#FFFFFF' : textMuted,
+              fontSize: '10.5px',
+              fontWeight: 800,
+              padding: '2px 7px',
+              borderRadius: '10px',
+            }}>
+              {disputes.length}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('churn')}
+            style={{
+              padding: '12px 18px',
+              border: 'none',
+              background: 'transparent',
+              fontSize: '14px',
+              fontWeight: activeTab === 'churn' ? '800' : '600',
+              color: activeTab === 'churn' ? '#0070BA' : textMuted,
+              borderBottom: activeTab === 'churn' ? '3px solid #0070BA' : '3px solid transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              marginBottom: '-2px',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <span>🔄</span> Pay Later Churn Bailout
+            <span style={{
+              background: '#10B981',
+              color: '#FFFFFF',
+              fontSize: '10px',
+              fontWeight: 800,
+              padding: '2px 7px',
+              borderRadius: '10px',
+            }}>
+              NEW
+            </span>
+          </button>
+        </div>
+
+        {activeTab === 'disputes' ? (
+          <>
+            {/* Real-Time Enterprise KPI Cards */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '16px',
+              marginBottom: '24px',
+            }}>
+              {/* Card 1: Protected Capital */}
+              <div style={{
+                background: cardBg,
+                border: `1px solid ${cardBorder}`,
+                borderRadius: '16px',
+                padding: '20px',
+                boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.06)',
+              }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                  Protected Merchant Capital
                 </div>
-                <div className="payback-kpi-value" style={{ color: '#38BDF8' }}>
+                <div style={{ fontSize: '28px', fontWeight: 900, color: '#00A859', marginTop: '6px', letterSpacing: '-0.5px' }}>
+                  ${metrics.totalProtectedUSD} <span style={{ fontSize: '13px', fontWeight: 700, color: textMuted }}>USD</span>
+                </div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', marginTop: '8px', fontSize: '11px', fontWeight: 700, color: '#00A859', background: isDark ? 'rgba(0, 168, 89, 0.15)' : '#ECFDF5', padding: '3px 8px', borderRadius: '12px' }}>
+                  <span>✓</span> 100% Retained Revenue
+                </div>
+              </div>
+
+              {/* Card 2: AI Win Rate */}
+              <div style={{
+                background: cardBg,
+                border: `1px solid ${cardBorder}`,
+                borderRadius: '16px',
+                padding: '20px',
+                boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.06)',
+              }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                  AI Adjudication Win Rate
+                </div>
+                <div style={{ fontSize: '28px', fontWeight: 900, color: '#0070BA', marginTop: '6px', letterSpacing: '-0.5px' }}>
                   {metrics.winRatePercentage}%
                 </div>
-              </div>
-              <div className="payback-kpi-sub" style={{ color: '#94A3B8' }}>
-                Benchmark: <strong style={{ color: '#38BDF8' }}>Top 1%</strong>
-              </div>
-            </div>
-
-            {/* Card 3: Avg Response Time */}
-            <div className="payback-kpi-card" style={{ border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-              <div>
-                <div className="payback-kpi-title">
-                  Defense Speed
+                <div style={{ marginTop: '8px', fontSize: '11.5px', color: textMuted }}>
+                  Benchmark: <strong style={{ color: '#0070BA' }}>Top 1% Global Sellers</strong>
                 </div>
-                <div className="payback-kpi-value" style={{ color: '#F8FAFC' }}>
+              </div>
+
+              {/* Card 3: Defense Speed */}
+              <div style={{
+                background: cardBg,
+                border: `1px solid ${cardBorder}`,
+                borderRadius: '16px',
+                padding: '20px',
+                boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.06)',
+              }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                  Autonomous Turnaround
+                </div>
+                <div style={{ fontSize: '28px', fontWeight: 900, color: textTitle, marginTop: '6px', letterSpacing: '-0.5px' }}>
                   {metrics.avgResponseTimeSeconds}s
                 </div>
-              </div>
-              <div className="payback-kpi-sub" style={{ color: '#94A3B8' }}>
-                Manual: <strike>45 mins</strike>
-              </div>
-            </div>
-
-            {/* Card 4: Penalties Avoided */}
-            <div className="payback-kpi-card" style={{ border: '1px solid rgba(245, 158, 11, 0.25)' }}>
-              <div>
-                <div className="payback-kpi-title">
-                  Fees Avoided
+                <div style={{ marginTop: '8px', fontSize: '11.5px', color: textMuted }}>
+                  Manual Resolution: <strike>45 mins</strike>
                 </div>
-                <div className="payback-kpi-value" style={{ color: '#F59E0B' }}>
+              </div>
+
+              {/* Card 4: Fees Avoided */}
+              <div style={{
+                background: cardBg,
+                border: `1px solid ${cardBorder}`,
+                borderRadius: '16px',
+                padding: '20px',
+                boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.06)',
+              }}>
+                <div style={{ fontSize: '11.5px', fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
+                  Dispute Fees Avoided
+                </div>
+                <div style={{ fontSize: '28px', fontWeight: 900, color: '#D97706', marginTop: '6px', letterSpacing: '-0.5px' }}>
                   $40.00
                 </div>
-              </div>
-              <div className="payback-kpi-sub" style={{ color: '#94A3B8' }}>
-                Zero PayPal Penalties
+                <div style={{ marginTop: '8px', fontSize: '11.5px', color: textMuted }}>
+                  Zero Standard Chargeback Penalties
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Interactive Live Defense Console (Hero Feature for Hackathon Judges) */}
-          <div className="payback-console-card">
-            <div className="payback-console-header">
-              <div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(56, 189, 248, 0.15)', padding: '3px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '700', color: '#38BDF8', marginBottom: '8px' }}>
-                  <span>⚡</span> LIVE EVALUATION ENGINE
+            {/* Live Evaluation Engine Hero Box */}
+            <div style={{
+              background: isDark ? 'linear-gradient(145deg, #0F172A 0%, #1E293B 100%)' : 'linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%)',
+              border: `1.5px solid ${isDark ? 'rgba(56, 189, 248, 0.3)' : '#BFDBFE'}`,
+              borderRadius: '20px',
+              padding: '24px',
+              marginBottom: '28px',
+              boxShadow: isDark ? '0 12px 32px rgba(0, 112, 186, 0.2)' : '0 4px 16px rgba(0, 112, 186, 0.08)',
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+                <div style={{ maxWidth: '650px' }}>
+                  <div style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: isDark ? 'rgba(0, 112, 186, 0.25)' : '#EFF6FF',
+                    border: `1px solid ${isDark ? 'rgba(56, 189, 248, 0.4)' : '#BFDBFE'}`,
+                    padding: '3px 10px',
+                    borderRadius: '20px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    color: '#0070BA',
+                    marginBottom: '8px',
+                  }}>
+                    <span>⚡</span> PAYPAL DISPUTES API EVALUATION ENGINE
+                  </div>
+                  <h3 style={{ margin: 0, fontSize: '19px', fontWeight: 900, color: textTitle, letterSpacing: '-0.4px' }}>
+                    Simulate Live PayPal Chargeback Defense
+                  </h3>
+                  <p style={{ margin: '6px 0 0', fontSize: '13px', color: textMuted, lineHeight: '1.5' }}>
+                    Simulates an incoming PayPal dispute webhook (<code style={{ color: '#0070BA', fontWeight: 700 }}>CUSTOMER.DISPUTE.CREATED</code>) and executes PayBack's autonomous evidence extraction pipeline to query PostgreSQL ledgers and submit proof to the PayPal Disputes API in 1.4s.
+                  </p>
                 </div>
-                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#F8FAFC' }}>
-                  Simulate Live PayPal Chargeback Defense
-                </h3>
-                <p style={{ margin: '4px 0 0 0', fontSize: '12.5px', color: '#94A3B8', lineHeight: '1.4' }}>
-                  Triggers an incoming PayPal dispute webhook and watches PayBack assemble PostgreSQL logs & submit proof to the PayPal Disputes API in 1.4s.
-                </p>
+
+                <button
+                  onClick={() => setShowSimModal(true)}
+                  disabled={simulating}
+                  className="btn-paypal-pill"
+                  style={{
+                    padding: '12px 24px',
+                    fontSize: '14px',
+                    minHeight: '48px',
+                  }}
+                >
+                  {simulating ? '⏳ Defense In Flight...' : '⚡ Trigger Incoming PayPal Claim'}
+                </button>
               </div>
 
-              <button
-                onClick={() => setShowSimModal(true)}
-                disabled={simulating}
-                className="payback-btn-primary"
-              >
-                {simulating ? '⏳ Defense In Flight...' : '⚡ Trigger PayPal Dispute'}
-              </button>
-            </div>
-
-            {/* Stepper Pipeline Visualizer */}
-            {simulating && (
-              <div style={{ marginTop: '16px', marginBottom: '16px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '600', color: '#38BDF8', marginBottom: '6px' }}>
-                  <span>Autonomous Pipeline Turnaround</span>
-                  <span>{simProgress}%</span>
+              {/* Progress Stepper */}
+              {simulating && (
+                <div style={{ marginTop: '20px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, color: '#0070BA', marginBottom: '6px' }}>
+                    <span>Assembling PayPal Evidence Dossier (v1/customer/disputes)...</span>
+                    <span>{simProgress}%</span>
+                  </div>
+                  <div style={{ width: '100%', height: '7px', background: isDark ? 'rgba(255,255,255,0.1)' : '#E2E8F0', borderRadius: '10px', overflow: 'hidden' }}>
+                    <div style={{ width: `${simProgress}%`, height: '100%', background: 'linear-gradient(90deg, #0070BA, #00A859)', transition: 'width 0.3s ease' }} />
+                  </div>
                 </div>
-                <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '6px', overflow: 'hidden' }}>
-                  <div
-                    style={{
-                      width: `${simProgress}%`,
-                      height: '100%',
-                      background: 'linear-gradient(90deg, #0070BA, #10B981)',
-                      transition: 'width 0.3s ease',
-                    }}
-                  />
-                </div>
-              </div>
-            )}
+              )}
 
-            {/* Live Terminal Telemetry Stream */}
-            {simulationLog.length > 0 && (
-              <div
-                style={{
-                  marginTop: '16px',
+              {/* Live Terminal Telemetry Log */}
+              {simulationLog.length > 0 && (
+                <div style={{
+                  marginTop: '18px',
                   background: '#0B0F19',
                   borderRadius: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '12px',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  padding: '14px',
                   fontFamily: "'Space Mono', monospace",
                   fontSize: '11px',
                   lineHeight: '1.6',
                   maxHeight: '220px',
                   overflowY: 'auto',
-                  WebkitOverflowScrolling: 'touch',
-                  wordBreak: 'break-word',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EF4444' }} />
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B' }} />
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981' }} />
-                  <span style={{ fontSize: '10.5px', color: '#64748B', marginLeft: '6px' }}>payback-telemetry-engine.log</span>
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px', paddingBottom: '6px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#EF4444' }} />
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#F59E0B' }} />
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981' }} />
+                    <span style={{ fontSize: '10.5px', color: '#64748B', marginLeft: '6px' }}>paypal-dispute-telemetry.log</span>
+                  </div>
+                  {simulationLog.map((log, idx) => (
+                    <div key={idx} style={{ color: log.includes('✅') ? '#34D399' : '#38BDF8' }}>
+                      {log}
+                    </div>
+                  ))}
                 </div>
-                {simulationLog.map((log, idx) => (
-                  <div key={idx} style={{ color: log.includes('✅') ? '#34D399' : '#38BDF8', fontSize: '11px' }}>
-                    {log}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Dispute Radar Table / List */}
-          <div>
-            <div className="payback-radar-header">
-              <h3 style={{ fontSize: '17px', fontWeight: '800', color: '#F8FAFC', margin: 0 }}>
-                Dispute Defense Radar ({filteredDisputes.length})
-              </h3>
-
-              {/* Status Filters & Search */}
-              <div className="payback-radar-controls">
-                <input
-                  type="text"
-                  placeholder="Search by Case ID..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="payback-input-search"
-                />
-
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="payback-select-filter"
-                >
-                  <option value="ALL">All Statuses</option>
-                  <option value="EVIDENCE_SUBMITTED">Submitted</option>
-                  <option value="RESOLVED_MERCHANT_WIN">Merchant Won</option>
-                  <option value="UNDER_REVIEW">Under Review</option>
-                </select>
-              </div>
+              )}
             </div>
 
-            {/* List Cards */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {filteredDisputes.map((dispute) => {
-                const isWon = dispute.status === 'RESOLVED_MERCHANT_WIN';
-                return (
-                  <div
-                    key={dispute.id}
-                    onClick={() => setActiveDossier(dispute)}
-                    className="payback-dispute-row"
-                  >
-                    <div style={{ minWidth: 0, flex: '1 1 auto' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                        <span style={{ fontWeight: '800', color: '#F8FAFC', fontSize: '14.5px' }}>
-                          {dispute.paypal_dispute_id}
-                        </span>
-                        <span
-                          style={{
-                            fontSize: '10.5px',
-                            fontWeight: '700',
-                            padding: '2px 8px',
-                            borderRadius: '6px',
-                            background: isWon ? 'rgba(16, 185, 129, 0.2)' : 'rgba(56, 189, 248, 0.2)',
-                            color: isWon ? '#10B981' : '#38BDF8',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {isWon ? 'WON • 100% CAPITAL RETAINED' : 'EVIDENCE SUBMITTED'}
-                        </span>
-                      </div>
-
-                      <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        Claim: <strong>{dispute.reason?.replace(/_/g, ' ')}</strong> • Target: Utility Direct
-                      </div>
-                    </div>
-
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontSize: '16px', fontWeight: '900', color: '#F8FAFC' }}>
-                        ${dispute.dispute_amount}{' '}
-                        <span style={{ fontSize: '10.5px', fontWeight: '600', color: '#64748B' }}>USD</span>
-                      </div>
-                      <div style={{ fontSize: '11px', color: '#10B981', fontWeight: '700', marginTop: '2px' }}>
-                        {dispute.confidence_score ? `${dispute.confidence_score}% Confidence` : '95% Score'}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </>
-      ) : (
-        /* CHURN BAILOUT TAB */
-        <div>
-          <div
-            style={{
-              background: 'linear-gradient(145deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
+            {/* Official PayPal Resolution Center Case Manager */}
+            <div style={{
+              background: cardBg,
+              border: `1px solid ${cardBorder}`,
               borderRadius: '20px',
-              padding: '20px 16px',
-              marginBottom: '24px',
-              boxShadow: '0 12px 32px rgba(16, 185, 129, 0.1)',
-            }}
-          >
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(16, 185, 129, 0.15)', padding: '3px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '700', color: '#10B981', marginBottom: '8px' }}>
-              <span>🔄</span> PREDICTIVE DUNNING ENGINE
+              padding: '24px',
+              boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.06)',
+            }}>
+              {/* Table Controls */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginBottom: '18px',
+              }}>
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 900, color: textTitle, margin: 0 }}>
+                    Active Cases ({filteredDisputes.length})
+                  </h3>
+                  <p style={{ margin: '2px 0 0', fontSize: '12.5px', color: textMuted }}>
+                    Customer disputes and claims automatically handled by PayBack AI.
+                  </p>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    placeholder="Search Case ID or Buyer..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{
+                      background: isDark ? '#1E293B' : '#F8FAFC',
+                      border: `1px solid ${cardBorder}`,
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      fontSize: '12.5px',
+                      color: textBody,
+                      outline: 'none',
+                    }}
+                  />
+
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    style={{
+                      background: isDark ? '#1E293B' : '#F8FAFC',
+                      border: `1px solid ${cardBorder}`,
+                      padding: '8px 12px',
+                      borderRadius: '8px',
+                      fontSize: '12.5px',
+                      color: textBody,
+                      outline: 'none',
+                    }}
+                  >
+                    <option value="ALL">All Statuses</option>
+                    <option value="EVIDENCE_SUBMITTED">Evidence Submitted</option>
+                    <option value="RESOLVED_MERCHANT_WIN">Resolved in Seller Favor</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Case Cards List (Responsive & Touch-Friendly) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {filteredDisputes.map((dispute) => {
+                  const isWon = dispute.status === 'RESOLVED_MERCHANT_WIN';
+                  return (
+                    <div
+                      key={dispute.id}
+                      onClick={() => setActiveDossier(dispute)}
+                      style={{
+                        background: isDark ? 'rgba(30, 41, 59, 0.6)' : '#FFFFFF',
+                        border: `1px solid ${cardBorder}`,
+                        borderRadius: '14px',
+                        padding: '16px',
+                        cursor: 'pointer',
+                        transition: 'all 0.18s ease',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        gap: '12px',
+                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.borderColor = '#0070BA'}
+                      onMouseLeave={(e) => e.currentTarget.style.borderColor = cardBorder}
+                    >
+                      <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                          <span style={{ fontWeight: 900, color: '#0070BA', fontSize: '15px' }}>
+                            {dispute.paypal_dispute_id}
+                          </span>
+                          <span className={isWon ? 'paypal-badge-won' : 'paypal-badge-review'}>
+                            {isWon ? '✓ Resolved in Seller Favor' : '⚡ Evidence Submitted (Under Review)'}
+                          </span>
+                        </div>
+
+                        <div style={{ fontSize: '12.5px', color: textBody, marginTop: '5px' }}>
+                          <strong>{dispute.buyer_name || 'Verified Buyer'}</strong> ({dispute.buyer_email || 'client@example.com'})
+                        </div>
+
+                        <div style={{ fontSize: '11.5px', color: textMuted, marginTop: '2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          Reason: <strong>{dispute.reason?.replace(/_/g, ' ')}</strong> • Response Time: <strong style={{ color: '#00A859' }}>1.4s Instant Auto-Submit</strong>
+                        </div>
+                      </div>
+
+                      <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <div style={{ fontSize: '18px', fontWeight: 900, color: textTitle }}>
+                          ${dispute.dispute_amount} <span style={{ fontSize: '11px', fontWeight: 700, color: textMuted }}>USD</span>
+                        </div>
+                        <div style={{ fontSize: '11px', color: '#00A859', fontWeight: 700, marginTop: '2px' }}>
+                          {dispute.confidence_score ? `${dispute.confidence_score}% Confidence` : '98% Win Score'}
+                        </div>
+                        <button
+                          className="btn-paypal-outline-pill"
+                          style={{ marginTop: '8px', padding: '4px 12px', fontSize: '11px' }}
+                        >
+                          View Dossier →
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <h2 style={{ fontSize: '19px', fontWeight: '800', color: '#F8FAFC', margin: 0, lineHeight: '1.3' }}>
-              Convert Failed Recurring Payments into PayPal Pay Later
+          </>
+        ) : (
+          /* CHURN BAILOUT TAB */
+          <div style={{
+            background: cardBg,
+            border: `1px solid ${cardBorder}`,
+            borderRadius: '20px',
+            padding: '24px',
+            boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.25)' : '0 1px 3px rgba(0,0,0,0.06)',
+          }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: isDark ? 'rgba(0, 168, 89, 0.2)' : '#ECFDF5',
+              padding: '3px 10px',
+              borderRadius: '20px',
+              fontSize: '11px',
+              fontWeight: 800,
+              color: '#00A859',
+              marginBottom: '10px',
+            }}>
+              <span>🔄</span> PREDICTIVE DUNNING & PAYPAL PAY LATER INTEGRATION
+            </div>
+
+            <h2 style={{ fontSize: '22px', fontWeight: 900, color: textTitle, margin: 0, letterSpacing: '-0.5px' }}>
+              Bail Out Failed Recurring Subscriptions with PayPal Pay Later
             </h2>
-            <p style={{ margin: '6px 0 18px 0', fontSize: '12.5px', color: '#94A3B8', lineHeight: '1.4' }}>
-              Traditional dunning blindly retries cards on fixed days until subscribers churn. PayBack detects cashflow crunches and dynamically deploys interest-free <strong>PayPal Pay in 4</strong> installment offers.
+            <p style={{ margin: '6px 0 20px', fontSize: '13.5px', color: textMuted, lineHeight: '1.5' }}>
+              When a SaaS subscriber's debit card fails due to temporary liquidity constraints, traditional gateways blindly retry and churn the subscriber. PayBack detects the failure in BullMQ queues and dynamically generates an interest-free <strong>PayPal Pay in 4</strong> installment offer via the PayPal Invoicing API (<code style={{ color: '#0070BA', fontWeight: 700 }}>v2/invoicing/invoices</code>).
             </p>
 
-            {/* Comparison Visual */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '18px' }}>
-              <div style={{ background: 'rgba(239, 68, 68, 0.08)', border: '1px solid rgba(239, 68, 68, 0.25)', borderRadius: '14px', padding: '14px' }}>
-                <div style={{ fontSize: '12.5px', fontWeight: '800', color: '#EF4444', marginBottom: '4px' }}>
-                  ❌ Traditional Dunning (Stripe / Static)
-                </div>
-                <div style={{ fontSize: '11.5px', color: '#94A3B8', lineHeight: '1.5' }}>
-                  • Payment fails on 18th.<br />
-                  • Blind retries fail on 19th, 20th.<br />
-                  • Account cancelled on 21st.<br />
-                  • <strong>Result: 100% Subscriber Lost.</strong>
-                </div>
+            {/* Official PayPal Pay Later Messaging Preview Widget */}
+            <div className="paypal-paylater-widget" style={{ background: isDark ? '#1E293B' : '#F8FAFC', borderColor: cardBorder }}>
+              <div style={{ width: '32px', height: '32px', flexShrink: 0 }}>
+                <svg viewBox="0 0 240 240" width="32" height="32" fill="none">
+                  <path d="M58 35 h58 c24 0 42 13 42 37 c0 25 -20 41 -46 41 h-22 l-12 72 h-20 z" fill="#0079C1" />
+                  <path d="M82 62 h56 c22 0 39 12 39 35 c0 24 -19 39 -43 39 h-21 l-11 67 h-20 z" fill="#00457C" opacity="0.9" />
+                </svg>
               </div>
-
-              <div style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '14px', padding: '14px' }}>
-                <div style={{ fontSize: '12.5px', fontWeight: '800', color: '#10B981', marginBottom: '4px' }}>
-                  ✅ PayBack AI + PayPal Pay Later
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: textTitle }}>
+                  Pay in 4 interest-free payments of $13.50 with PayPal.
                 </div>
-                <div style={{ fontSize: '11.5px', color: '#94A3B8', lineHeight: '1.5' }}>
-                  • Payment fails on 18th.<br />
-                  • AI detects liquidity delay.<br />
-                  • Dispatches 4 x $13.50 Pay in 4 invoice.<br />
-                  • <strong>Result: Subscriber Retained.</strong>
+                <div style={{ fontSize: '11.5px', color: textMuted }}>
+                  No late fees. Automatic bi-weekly deductions. Zero merchant risk—PayPal pays merchant upfront.
                 </div>
               </div>
             </div>
 
-            {/* Active Simulation Card */}
-            <div style={{ background: '#0F172A', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '16px', marginBottom: '18px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {/* Dunning Comparison Matrix */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px', margin: '20px 0' }}>
+              <div style={{ background: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2', border: '1px solid #FECACA', borderRadius: '14px', padding: '16px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#DC2626', marginBottom: '6px' }}>
+                  ❌ Traditional Dunning (Stripe / Static Retries)
+                </div>
+                <div style={{ fontSize: '12px', color: isDark ? '#E2E8F0' : '#475569', lineHeight: '1.6' }}>
+                  • Payment fails on 18th (liquidity crunch).<br />
+                  • Dumb retry attempts fail on 19th & 20th.<br />
+                  • Account cancelled on 21st.<br />
+                  • <strong>Result: 100% Subscriber Lost ($720 LTV destroyed).</strong>
+                </div>
+              </div>
+
+              <div style={{ background: isDark ? 'rgba(0, 168, 89, 0.08)' : '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '14px', padding: '16px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 800, color: '#16A34A', marginBottom: '6px' }}>
+                  ✅ PayBack AI + PayPal Pay Later Bailout
+                </div>
+                <div style={{ fontSize: '12px', color: isDark ? '#E2E8F0' : '#475569', lineHeight: '1.6' }}>
+                  • Payment fails on 18th.<br />
+                  • AI detects liquidity delay & generates Pay in 4 invoice.<br />
+                  • Subscriber accepts 4 x $13.50 bi-weekly payments.<br />
+                  • <strong>Result: Subscriber Retained & Merchant Paid Upfront.</strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Simulated Failed Debit Interception Card */}
+            <div style={{ background: isDark ? '#1E293B' : '#F1F5F9', border: `1px solid ${cardBorder}`, borderRadius: '16px', padding: '18px', marginBottom: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '14px' }}>
                 <div>
-                  <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#EF4444' }}>
-                    ⚠️ Failed Recurring Debit Intercepted (BullMQ Queue)
+                  <div style={{ fontSize: '11.5px', fontWeight: 800, color: '#DC2626' }}>
+                    ⚠️ FAILED RECURRING DEBIT INTERCEPTED (BullMQ Event)
                   </div>
-                  <div style={{ fontSize: '14.5px', fontWeight: '800', color: '#F8FAFC', marginTop: '4px', wordBreak: 'break-all' }}>
-                    dev.subscriber@example.com
+                  <div style={{ fontSize: '15px', fontWeight: 900, color: textTitle, marginTop: '4px' }}>
+                    dev.subscriber@example.com (Jordan Lee)
                   </div>
-                  <div style={{ fontSize: '11.5px', color: '#94A3B8', marginTop: '2px' }}>
-                    Plan: Enterprise SaaS Tier • Amount: $60.00/month • Reason: Insufficient Funds
+                  <div style={{ fontSize: '12px', color: textMuted, marginTop: '2px' }}>
+                    Subscription: Enterprise Tier • $60.00/mo • Reason: Card Insufficient Funds
                   </div>
                 </div>
 
                 <button
                   onClick={handleDeployPayLaterRescue}
                   disabled={rescuing}
-                  className="payback-btn-primary"
-                  style={{
-                    background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
-                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.3)',
-                  }}
+                  className="btn-paypal-gold-pill"
                 >
-                  {rescuing ? 'Generating Offer...' : 'Deploy PayPal Pay in 4 Bailout'}
+                  {rescuing ? 'Generating PayPal Offer...' : 'Deploy PayPal Pay in 4 Bailout'}
                 </button>
               </div>
             </div>
 
-            {/* Rescued Card Feedback */}
+            {/* Recovery Feedback Box */}
             {churnRescued && (
-              <div
-                style={{
-                  background: 'linear-gradient(145deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.1) 100%)',
-                  border: '1px solid #10B981',
-                  borderRadius: '16px',
-                  padding: '16px',
-                  marginTop: '16px',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '22px' }}>🎉</span>
+              <div style={{
+                background: isDark ? 'rgba(0, 168, 89, 0.12)' : '#ECFDF5',
+                border: '1.5px solid #00A859',
+                borderRadius: '16px',
+                padding: '20px',
+                marginTop: '16px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                  <span style={{ fontSize: '24px' }}>🎉</span>
                   <div>
-                    <div style={{ fontSize: '15px', fontWeight: '800', color: '#10B981' }}>
+                    <div style={{ fontSize: '16px', fontWeight: 900, color: '#00A859' }}>
                       Subscriber Successfully Retained via PayPal!
                     </div>
-                    <div style={{ fontSize: '11.5px', color: '#E2E8F0' }}>
-                      PayPal Invoicing API dispatched dynamic bailout offer with zero friction.
+                    <div style={{ fontSize: '12px', color: textBody }}>
+                      PayPal Invoicing API dispatched dynamic installment bailout offer.
                     </div>
                   </div>
                 </div>
 
-                {/* 4-Installment Pill Breakdown */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', margin: '14px 0' }}>
+                {/* 4 Installment Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px', margin: '14px 0' }}>
                   {['Today: $13.50', '2 Weeks: $13.50', '4 Weeks: $13.50', '6 Weeks: $13.50'].map((inst, i) => (
-                    <div key={i} style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '10px 8px', borderRadius: '10px', textAlign: 'center', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-                      <div style={{ fontSize: '9.5px', color: '#94A3B8' }}>Installment {i + 1}</div>
-                      <div style={{ fontSize: '13px', fontWeight: '800', color: '#10B981' }}>{inst.split(': ')[1]}</div>
+                    <div key={i} style={{ background: cardBg, padding: '10px 8px', borderRadius: '10px', textAlign: 'center', border: `1px solid ${cardBorder}` }}>
+                      <div style={{ fontSize: '10px', color: textMuted }}>Installment {i + 1}</div>
+                      <div style={{ fontSize: '14px', fontWeight: 900, color: '#0070BA' }}>{inst.split(': ')[1]}</div>
                     </div>
                   ))}
                 </div>
 
-                <div style={{ fontSize: '11px', color: '#94A3B8' }}>
+                <div style={{ fontSize: '11.5px', color: textMuted }}>
                   Invoice Reference: <strong>{churnRescued.invoice_id}</strong> • 10% Loyalty Retention Credit Applied.
                 </div>
               </div>
             )}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Forensic Evidence Dossier Inspector Modal */}
-      {activeDossier && (
-        <div className="payback-modal-backdrop">
-          <div className="payback-modal-sheet">
-            {/* Modal Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <div>
-                <h2 style={{ fontSize: '18px', fontWeight: '900', color: '#F8FAFC', margin: 0 }}>
-                  Forensic Evidence Dossier
-                </h2>
-                <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '2px' }}>
-                  Case ID: <strong style={{ color: '#38BDF8' }}>{activeDossier.paypal_dispute_id || activeDossier.dispute_id}</strong>
+        {/* Slide-out Forensic Evidence Dossier Drawer (Enterprise PayPal Drawer) */}
+        {activeDossier && (
+          <div className="paypal-drawer-backdrop" onClick={() => setActiveDossier(null)}>
+            <div className="paypal-drawer-panel" style={{ background: cardBg }} onClick={(e) => e.stopPropagation()}>
+              {/* Drawer Header */}
+              <div style={{
+                padding: '20px 24px',
+                borderBottom: `1px solid ${cardBorder}`,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: isDark ? '#1E293B' : '#F8FAFC',
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '18px', fontWeight: 900, color: textTitle }}>
+                      Case {activeDossier.paypal_dispute_id || activeDossier.dispute_id}
+                    </span>
+                    <span className="paypal-badge-won">
+                      {activeDossier.confidence_score || 98}% Confidence
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '12px', color: textMuted, marginTop: '2px' }}>
+                    PayPal Disputes API Adjudication Packet & Forensic Audit Trail
+                  </div>
                 </div>
+
+                <button
+                  onClick={() => setActiveDossier(null)}
+                  style={{
+                    background: isDark ? 'rgba(255,255,255,0.1)' : '#E2E8F0',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    fontSize: '15px',
+                    color: textTitle,
+                  }}
+                >
+                  ✕
+                </button>
               </div>
 
-              <button
-                onClick={() => setActiveDossier(null)}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: 'none',
-                  color: '#94A3B8',
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '50%',
-                  cursor: 'pointer',
-                  fontSize: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Dossier Tabs */}
-            <div style={{ display: 'flex', gap: '6px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)', paddingBottom: '10px', marginBottom: '16px', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-              <button
-                onClick={() => setDossierTab('brief')}
-                style={{
-                  background: dossierTab === 'brief' ? '#0070BA' : 'transparent',
-                  color: dossierTab === 'brief' ? '#fff' : '#94A3B8',
-                  border: 'none',
-                  padding: '7px 12px',
-                  borderRadius: '8px',
-                  fontSize: '11.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Legal Brief
-              </button>
-              <button
-                onClick={() => setDossierTab('forensics')}
-                style={{
-                  background: dossierTab === 'forensics' ? '#0070BA' : 'transparent',
-                  color: dossierTab === 'forensics' ? '#fff' : '#94A3B8',
-                  border: 'none',
-                  padding: '7px 12px',
-                  borderRadius: '8px',
-                  fontSize: '11.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Session Forensics
-              </button>
-              <button
-                onClick={() => setDossierTab('timeline')}
-                style={{
-                  background: dossierTab === 'timeline' ? '#0070BA' : 'transparent',
-                  color: dossierTab === 'timeline' ? '#fff' : '#94A3B8',
-                  border: 'none',
-                  padding: '7px 12px',
-                  borderRadius: '8px',
-                  fontSize: '11.5px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                Timeline
-              </button>
-            </div>
-
-            {dossierTab === 'brief' && (
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
-                  <div style={{ fontSize: '11.5px', fontWeight: '700', color: '#10B981' }}>
-                    Score: {activeDossier.confidence_score || 100}% • Irrefutable Fulfillment
-                  </div>
+              {/* Drawer Body */}
+              <div style={{ padding: '24px', flex: 1, overflowY: 'auto' }}>
+                {/* Drawer Tabs */}
+                <div style={{ display: 'flex', gap: '6px', borderBottom: `1px solid ${cardBorder}`, paddingBottom: '12px', marginBottom: '18px' }}>
                   <button
-                    onClick={copyBriefToClipboard}
+                    onClick={() => setDossierTab('brief')}
                     style={{
-                      background: 'rgba(56, 189, 248, 0.15)',
-                      color: '#38BDF8',
+                      background: dossierTab === 'brief' ? '#0070BA' : 'transparent',
+                      color: dossierTab === 'brief' ? '#fff' : textMuted,
                       border: 'none',
-                      padding: '5px 12px',
-                      borderRadius: '6px',
-                      fontSize: '11px',
-                      fontWeight: '700',
+                      padding: '8px 14px',
+                      borderRadius: '20px',
+                      fontSize: '12px',
+                      fontWeight: 700,
                       cursor: 'pointer',
                     }}
                   >
-                    {copiedBrief ? '✓ Copied!' : '📋 Copy Legal Brief'}
+                    1. Formal Legal Brief
+                  </button>
+                  <button
+                    onClick={() => setDossierTab('forensics')}
+                    style={{
+                      background: dossierTab === 'forensics' ? '#0070BA' : 'transparent',
+                      color: dossierTab === 'forensics' ? '#fff' : textMuted,
+                      border: 'none',
+                      padding: '8px 14px',
+                      borderRadius: '20px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    2. Network & Session Forensics
+                  </button>
+                  <button
+                    onClick={() => setDossierTab('timeline')}
+                    style={{
+                      background: dossierTab === 'timeline' ? '#0070BA' : 'transparent',
+                      color: dossierTab === 'timeline' ? '#fff' : textMuted,
+                      border: 'none',
+                      padding: '8px 14px',
+                      borderRadius: '20px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    3. Ledger Timeline
                   </button>
                 </div>
 
-                <pre
-                  style={{
-                    background: '#0B0F19',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '12px',
-                    padding: '14px',
-                    fontSize: '10.5px',
-                    lineHeight: '1.6',
-                    color: '#E2E8F0',
-                    whiteSpace: 'pre-wrap',
-                    maxHeight: '300px',
-                    overflowY: 'auto',
-                    WebkitOverflowScrolling: 'touch',
-                    fontFamily: "'Space Mono', monospace",
-                    wordBreak: 'break-word',
-                  }}
+                {/* Tab 1: Formal Adjudication Brief */}
+                {dossierTab === 'brief' && (
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#00A859' }}>
+                        ✓ Criteria Met: Proof of Delivery & Digital Token Validated
+                      </div>
+                      <button
+                        onClick={copyBriefToClipboard}
+                        className="btn-paypal-outline-pill"
+                        style={{ padding: '4px 12px', fontSize: '11.5px' }}
+                      >
+                        {copiedBrief ? '✓ Copied!' : '📋 Copy Legal Brief'}
+                      </button>
+                    </div>
+
+                    <pre style={{
+                      background: isDark ? '#0B0F19' : '#F8FAFC',
+                      border: `1px solid ${cardBorder}`,
+                      borderRadius: '12px',
+                      padding: '16px',
+                      fontSize: '11px',
+                      lineHeight: '1.6',
+                      color: textBody,
+                      whiteSpace: 'pre-wrap',
+                      maxHeight: '360px',
+                      overflowY: 'auto',
+                      fontFamily: "'Space Mono', monospace",
+                    }}>
+                      {activeDossier.defense_summary || activeDossier.ai_defense_summary}
+                    </pre>
+                  </div>
+                )}
+
+                {/* Tab 2: Network Forensics */}
+                {dossierTab === 'forensics' && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+                    <div style={{ background: isDark ? '#1E293B' : '#F8FAFC', padding: '14px', borderRadius: '12px', border: `1px solid ${cardBorder}` }}>
+                      <div style={{ fontSize: '11px', color: textMuted }}>Originating Client IP</div>
+                      <div style={{ fontSize: '14px', fontWeight: 800, color: textTitle, marginTop: '2px' }}>
+                        {activeDossier.evidence_packet?.session_forensics?.originating_ip || '102.89.33.14'}
+                      </div>
+                      <div style={{ fontSize: '10.5px', color: '#00A859', marginTop: '2px' }}>Geolocation Match: Lagos, NG</div>
+                    </div>
+
+                    <div style={{ background: isDark ? '#1E293B' : '#F8FAFC', padding: '14px', borderRadius: '12px', border: `1px solid ${cardBorder}` }}>
+                      <div style={{ fontSize: '11px', color: textMuted }}>Digital Goods Fulfillment Token</div>
+                      <div style={{ fontSize: '13px', fontWeight: 800, color: textTitle, marginTop: '2px', wordBreak: 'break-all' }}>
+                        {activeDossier.evidence_packet?.fulfillment?.digital_goods_token || '4920-1928-3847-1920-3849'}
+                      </div>
+                      <div style={{ fontSize: '10.5px', color: '#00A859', marginTop: '2px' }}>Cryptographic Delivery Confirmation</div>
+                    </div>
+
+                    <div style={{ background: isDark ? '#1E293B' : '#F8FAFC', padding: '14px', borderRadius: '12px', border: `1px solid ${cardBorder}`, gridColumn: '1 / -1' }}>
+                      <div style={{ fontSize: '11px', color: textMuted }}>Device User-Agent Fingerprint</div>
+                      <div style={{ fontSize: '12px', fontWeight: 600, color: textTitle, marginTop: '2px', wordBreak: 'break-all' }}>
+                        {activeDossier.evidence_packet?.session_forensics?.user_agent || 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4)'}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab 3: Timeline */}
+                {dossierTab === 'timeline' && (
+                  <div style={{ padding: '8px 0' }}>
+                    {[
+                      { time: 'T-3m 00s', label: 'User Login & 2FA Session Authenticated', ip: '102.89.33.14' },
+                      { time: 'T-0m 00s', label: 'Transaction Initiated & Double-Entry Ledger Debited', ip: '102.89.33.14' },
+                      { time: 'T+0m 01s', label: 'Digital Token Dispatched via Merchant API Gateway (Code 90000)', ip: 'PayPal/PayBackWorker' },
+                      { time: 'T+0m 45s', label: 'Post-Purchase Activity: Receipt Viewed & Account Active', ip: '102.89.33.14' },
+                    ].map((step, idx) => (
+                      <div key={idx} style={{ display: 'flex', gap: '12px', marginBottom: '14px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                          <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#00A859', flexShrink: 0 }} />
+                          {idx < 3 && <div style={{ width: '2px', height: '36px', background: isDark ? 'rgba(255,255,255,0.1)' : '#CBD5E1', marginTop: '4px' }} />}
+                        </div>
+                        <div>
+                          <div style={{ fontSize: '11px', color: '#0070BA', fontWeight: 700 }}>{step.time} • IP: {step.ip}</div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: textTitle }}>{step.label}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Drawer Footer Actions */}
+              <div style={{
+                padding: '16px 24px',
+                borderTop: `1px solid ${cardBorder}`,
+                display: 'flex',
+                gap: '12px',
+                background: isDark ? '#1E293B' : '#F8FAFC',
+              }}>
+                <button
+                  onClick={() => setActiveDossier(null)}
+                  className="btn-paypal-outline-pill"
+                  style={{ flex: 1 }}
                 >
-                  {activeDossier.defense_summary || activeDossier.ai_defense_summary}
-                </pre>
+                  Close Drawer
+                </button>
+                <button
+                  onClick={copyBriefToClipboard}
+                  className="btn-paypal-pill"
+                  style={{ flex: 1 }}
+                >
+                  {copiedBrief ? '✓ Legal Brief Copied' : 'Submit Evidence Packet'}
+                </button>
               </div>
-            )}
-
-            {dossierTab === 'forensics' && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
-                <div style={{ background: '#1E293B', padding: '12px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Originating Client IP</div>
-                  <div style={{ fontSize: '13px', fontWeight: '800', color: '#F8FAFC', marginTop: '2px', wordBreak: 'break-all' }}>
-                    {activeDossier.evidence_packet?.session_forensics?.originating_ip || '102.89.33.14'}
-                  </div>
-                  <div style={{ fontSize: '10px', color: '#10B981', marginTop: '2px' }}>Consistent Geo-Location</div>
-                </div>
-
-                <div style={{ background: '#1E293B', padding: '12px', borderRadius: '12px' }}>
-                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Fulfillment Token</div>
-                  <div style={{ fontSize: '13px', fontWeight: '800', color: '#F8FAFC', marginTop: '2px', wordBreak: 'break-all' }}>
-                    {activeDossier.evidence_packet?.fulfillment?.digital_goods_token || '4920-1928-3847'}
-                  </div>
-                  <div style={{ fontSize: '10px', color: '#10B981', marginTop: '2px' }}>Cryptographic Proof</div>
-                </div>
-
-                <div style={{ background: '#1E293B', padding: '12px', borderRadius: '12px', gridColumn: '1 / -1' }}>
-                  <div style={{ fontSize: '10.5px', color: '#94A3B8' }}>Device User-Agent Fingerprint</div>
-                  <div style={{ fontSize: '11.5px', fontWeight: '600', color: '#F8FAFC', marginTop: '2px', wordBreak: 'break-all' }}>
-                    {activeDossier.evidence_packet?.session_forensics?.user_agent || 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4)'}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {dossierTab === 'timeline' && (
-              <div style={{ padding: '6px 0' }}>
-                {[
-                  { time: 'T-3m 00s', label: 'User Login & 2FA Session Authenticated', ip: '102.89.33.14' },
-                  { time: 'T-0m 00s', label: 'Transaction Initiated & Double-Entry Ledger Debited', ip: '102.89.33.14' },
-                  { time: 'T+0m 01s', label: 'Digital Token Dispatched via Biller Gateway (Code 90000)', ip: 'PayPal/PayBackWorker' },
-                  { time: 'T+0m 45s', label: 'Post-Purchase Activity: Receipt Viewed & Account Active', ip: '102.89.33.14' },
-                ].map((step, idx) => (
-                  <div key={idx} style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#10B981', flexShrink: 0 }} />
-                      {idx < 3 && <div style={{ width: '2px', height: '32px', background: 'rgba(255, 255, 255, 0.1)', marginTop: '4px' }} />}
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '10.5px', color: '#38BDF8', fontWeight: '700' }}>{step.time} • IP: {step.ip}</div>
-                      <div style={{ fontSize: '12px', fontWeight: '600', color: '#F8FAFC', lineHeight: '1.4' }}>{step.label}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <button
-              onClick={() => setActiveDossier(null)}
-              style={{
-                width: '100%',
-                padding: '12px',
-                background: '#1E293B',
-                color: '#F8FAFC',
-                border: 'none',
-                borderRadius: '10px',
-                marginTop: '16px',
-                fontWeight: '700',
-                fontSize: '13px',
-                cursor: 'pointer',
-                minHeight: '46px',
-              }}
-            >
-              Close Dossier
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Simulation Modal */}
-      {showSimModal && (
-        <div className="payback-modal-backdrop">
-          <div className="payback-modal-sheet" style={{ maxWidth: '440px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: '900', color: '#F8FAFC', marginTop: 0 }}>
-              Simulate PayPal Chargeback
-            </h3>
-            <p style={{ fontSize: '12px', color: '#94A3B8', marginBottom: '16px' }}>
-              Choose claim parameters to test PayBack's autonomous evidence extraction pipeline.
-            </p>
-
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#CBD5E1', marginBottom: '4px' }}>
-              Dispute Amount ($ USD)
-            </label>
-            <input
-              type="number"
-              value={simParams.amount}
-              onChange={(e) => setSimParams({ ...simParams, amount: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px 12px',
-                background: '#1E293B',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '10px',
-                color: '#fff',
-                marginBottom: '14px',
-                fontSize: '14px',
-                outline: 'none',
-              }}
-            />
-
-            <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#CBD5E1', marginBottom: '4px' }}>
-              Claim Reason
-            </label>
-            <select
-              value={simParams.reason}
-              onChange={(e) => setSimParams({ ...simParams, reason: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '10px 12px',
-                background: '#1E293B',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '10px',
-                color: '#fff',
-                marginBottom: '20px',
-                fontSize: '13px',
-                outline: 'none',
-              }}
-            >
-              <option value="MERCHANDISE_OR_SERVICE_NOT_RECEIVED">Merchandise or Service Not Received</option>
-              <option value="UNAUTHORIZED_TRANSACTION">Unauthorized Transaction (Friendly Fraud)</option>
-              <option value="SIGNIFICANTLY_NOT_AS_DESCRIBED">Significantly Not As Described</option>
-            </select>
-
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button
-                onClick={() => setShowSimModal(false)}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: '#1E293B',
-                  color: '#94A3B8',
-                  border: 'none',
-                  borderRadius: '10px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  minHeight: '46px',
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSimulateDispute}
-                className="payback-btn-primary"
-                style={{ flex: 1 }}
-              >
-                Launch Defense
-              </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Bottom Navigation */}
+        {/* Claim Simulation Parameter Modal */}
+        {showSimModal && (
+          <div className="payback-modal-backdrop" onClick={() => setShowSimModal(false)}>
+            <div className="payback-modal-sheet" style={{ maxWidth: '460px', background: cardBg, border: `1px solid ${cardBorder}` }} onClick={(e) => e.stopPropagation()}>
+              <h3 style={{ fontSize: '19px', fontWeight: 900, color: textTitle, marginTop: 0 }}>
+                Simulate PayPal Chargeback Claim
+              </h3>
+              <p style={{ fontSize: '12.5px', color: textMuted, marginBottom: '16px' }}>
+                Select test claim parameters to watch PayBack assemble transaction forensics and dispatch proof to the PayPal Disputes API in 1.4s.
+              </p>
+
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: textTitle, marginBottom: '4px' }}>
+                Dispute Amount ($ USD)
+              </label>
+              <input
+                type="number"
+                value={simParams.amount}
+                onChange={(e) => setSimParams({ ...simParams, amount: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  background: isDark ? '#1E293B' : '#F8FAFC',
+                  border: `1px solid ${cardBorder}`,
+                  borderRadius: '10px',
+                  color: textBody,
+                  marginBottom: '14px',
+                  fontSize: '14px',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: textTitle, marginBottom: '4px' }}>
+                Claim Reason (PayPal Disputes v1 Code)
+              </label>
+              <select
+                value={simParams.reason}
+                onChange={(e) => setSimParams({ ...simParams, reason: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  background: isDark ? '#1E293B' : '#F8FAFC',
+                  border: `1px solid ${cardBorder}`,
+                  borderRadius: '10px',
+                  color: textBody,
+                  marginBottom: '20px',
+                  fontSize: '13px',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <option value="MERCHANDISE_OR_SERVICE_NOT_RECEIVED">Merchandise or Service Not Received</option>
+                <option value="UNAUTHORIZED_TRANSACTION">Unauthorized Transaction (Friendly Fraud)</option>
+                <option value="SIGNIFICANTLY_NOT_AS_DESCRIBED">Significantly Not As Described</option>
+              </select>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  onClick={() => setShowSimModal(false)}
+                  className="btn-paypal-outline-pill"
+                  style={{ flex: 1 }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSimulateDispute}
+                  className="btn-paypal-pill"
+                  style={{ flex: 1 }}
+                >
+                  Launch Defense
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+
+      {/* Mobile Navigation */}
       <BottomNav />
     </div>
   );
